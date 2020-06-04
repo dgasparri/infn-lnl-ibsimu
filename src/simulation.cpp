@@ -3,8 +3,6 @@
 #include <ibsimu.hpp>
 #include <error.hpp>
 #include <geometry.hpp>
-#include <dxf_solid.hpp>
-#include <mydxffile.hpp>
 #include <epot_field.hpp>
 #include <epot_efield.hpp>
 #include <meshvectorfield.hpp>
@@ -14,20 +12,8 @@
 
 #include "config.cpp"
 
-#define EXTRACTION 7
-#define PULLER 8
-#define FOCUS 9
-#define GROUND 10
 
 
-using namespace std;
-
-
-double Vplasma = 0;
-double Vextraction = -10;
-double Vpuller = -26.01e3;
-double Vfocus = -23.31e3; 
-double Vgnd = -24.01e3;
 
 int Nrounds = 50;
 double h = 0.5e-3;
@@ -51,7 +37,7 @@ void add_beam( Geometry &geom, ParticleDataBaseCyl &pdb, double q, double m,
 				 geom.origo(0), r0 );
 }
 
-
+/*
 void simu( int *argc, char ***argv )
 {
     double q = 6;
@@ -92,17 +78,6 @@ void simu( int *argc, char ***argv )
 
     //Debug, da https://sourceforge.net/p/ibsimu/code/ci/master/tree/src/dxf_solid.cpp#l57
 
-    /*
-    MyDXFEntities *ent = dxffile->get_entities();
-    std::cout<<"Step 0.1"<<std::endl;
-    MyDXFEntitySelection *layer = ent->selection_layer( "focus_line");
-    std::cout<<"Step 0.2"<<std::endl;
-    MyDXFEntitySelection *loop = ent->selection_path_loop( layer );
-    std::cout<<"Layer size: "<< layer->size()
-            <<" loop size: "<< loop->size() <<std::endl;
-   
-    std::cout<<"Step 1"<<std::endl;
-    */
 
     DXFSolid *s_focus = new DXFSolid( dxffile,  "focus_line" );
     s_focus->scale( 1e-3 );
@@ -222,19 +197,35 @@ void simu( int *argc, char ***argv )
     plotter.new_geometry_plot_window();
     plotter.run();
 }
+*/
 
 
-int main( int argc, char **argv )
+int main(int argc, char *argv[]) 
 {
+
     remove( "emit.txt" );
 
+    run_parameters_t *run_parameters_op;
+    run_parameters_op = run_parameters_m(argc, argv);
+    if(! run_parameters_op)
+        return 0; //No config file with run parameters provided
+
     try {
-	ibsimu.set_message_threshold( MSG_VERBOSE, 1 );
-	ibsimu.set_thread_count( 2 );
-	simu( &argc, &argv );
+    	ibsimu.set_message_threshold( MSG_VERBOSE, 1 );
+	    ibsimu.set_thread_count( 2 );
+
+        Geometry* geometry_op = geometry_m(*run_parameters_op); 
+
+        wall_bound_m(*geometry_op, *run_parameters_op);
+        dxfsolids_m(*geometry_op, *run_parameters_op);
+
+        MeshVectorField* bfield = bfield_m(*geometry_op, *run_parameters_op);
+
+    	//simu( &argc, &argv );
     } catch( Error e ) {
-	e.print_error_message( ibsimu.message(0) );
+	    e.print_error_message( ibsimu.message(0) );
     }
 
-    return( 0 );
+    
+
 }
