@@ -1,11 +1,12 @@
-#pragma ONCE
+#pragma once
 
 
 #include <boost/program_options/options_description.hpp>
 #include <boost/program_options/parsers.hpp>
 #include <boost/program_options/variables_map.hpp>
 
-
+#include <ibsimu.hpp>
+#include <error.hpp>
 #include <geometry.hpp>
 #include <dxf_solid.hpp>
 #include <mydxffile.hpp>
@@ -48,5 +49,8 @@ void add_solid_m(Geometry &geometry_o,
 
 void dxfsolids_m(Geometry &geometry_o, bpo::variables_map &vm_o);
 MeshVectorField* bfield_m(Geometry &geometry_o, bpo::variables_map &vm_o);
+
+int num_cores_m(bpo::variables_map &vm_o, int default_v = 2);
+message_type_e message_threshold_m(bpo::variables_map &vm_o, message_type_e default_v);
 
 run_parameters_t* run_parameters_m(int argc, char *argv[]); 

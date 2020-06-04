@@ -7,43 +7,16 @@
 g++ -g `pkg-config --cflags ibsimu-1.0.6dev` -c -o config.o config.cpp -lboost_program_options
 */
 
-#include <boost/program_options/options_description.hpp>
-#include <boost/program_options/parsers.hpp>
-#include <boost/program_options/variables_map.hpp>
-
-
-#include <geometry.hpp>
-#include <dxf_solid.hpp>
-#include <mydxffile.hpp>
-#include <epot_field.hpp>
-#include <epot_efield.hpp>
-#include <meshvectorfield.hpp>
-
-
-#include <string>
-#include <vector>
-
-/*
-*/
-
-// https://www.boost.org/doc/libs/1_60_0/doc/html/program_options/tutorial.html
-namespace bpo = boost::program_options;
- 
-typedef double origin_t; //Start [3]
-typedef double mesh_cell_size_h_t; //h
-typedef double geometry_value_t; //sizereq[3]
-typedef double voltage_t;
-typedef double dxf_scale_factor_t;
-typedef double bfield_scale_factor_t;
-typedef std::string bound_type_string_t;
-typedef bound_e bound_type_t;
-typedef bpo::variables_map run_parameters_t;
+#include "config.h"
 
 bpo::options_description config_file_options_m() 
 {
     bpo::options_description config_file_options_o("Config file options");
     config_file_options_o.add_options()
-        ("help", "print help message")
+    
+        ("ibsimu-cores", bpo::value<int>(), "Number of processor cores to use")
+        ("ibsimu-message-threshold", bpo::value<std::string>(), "Output message threshold [MSG_VERBOSE]")
+
         ("geometry-mode", bpo::value<std::string>(), "Geometry Mode (MODE_3D, MODE_CYL...)")
         ("origin-x", bpo::value<origin_t>(), "geometry origin x")
         ("origin-y", bpo::value<origin_t>(), "geometry origin y")
@@ -285,6 +258,24 @@ MeshVectorField* bfield_m(Geometry &geometry_o, bpo::variables_map &vm_o)
 }
 
 
+int num_cores_m(bpo::variables_map &vm_o, int default_v)
+{
+    if(vm_o.count("ibsimu-cores"))
+        return vm_o["ibsimu-cores"].as<int>();    
+    else
+        return default_v;
+}
+
+message_type_e message_threshold_m(bpo::variables_map &vm_o, message_type_e default_v)
+{
+    if(vm_o.count("ibsimu-message-threshold")) {
+        const std::string &s = vm_o["ibsimu-message-threshold"].as<std::string>();
+        if(s == "MSG_VERBOSE") 
+            return MSG_VERBOSE;
+    }
+    return default_v;
+
+}
 
 
 run_parameters_t* run_parameters_m(int argc, char *argv[]) 
@@ -302,7 +293,7 @@ run_parameters_t* run_parameters_m(int argc, char *argv[])
     bpo::options_description config_file_options_o = config_file_options_m();
 
     if (vm_cmdl_o.count("config-file")) {
-        run_parameters_t* vm_op;
+        run_parameters_t* vm_op = new run_parameters_t;
 
         const char* config_filename = vm_cmdl_o["config-file"].as<std::string>().c_str();
         store(parse_config_file(config_filename, config_file_options_o, true), *vm_op);
