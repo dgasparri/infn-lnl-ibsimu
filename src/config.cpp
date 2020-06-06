@@ -326,3 +326,62 @@ run_parameters_t* run_parameters_m(int argc, char *argv[])
     
 
 }
+
+
+
+
+analysis_parameters_t* analysis_parameters_m(int argc, char *argv[]) 
+{
+
+    bpo::options_description command_line_options_o("Command line options");
+    command_line_options_o.add_options()
+        ("help", "print help message")
+        ("config-file", bpo::value<std::string>(), "configuration file, path relative to executable");
+        ("epot-file", bpo::value<std::string>(), "epot file, path relative to executable");
+        ("pdb-file", bpo::value<std::string>(), "pdb file, path relative to executable");
+        ("bfield-file", bpo::value<std::string>(), "bfield file, path relative to executable");
+
+
+    bpo::variables_map vm_cmdl_o;
+    store(parse_command_line(argc, argv, command_line_options_o), vm_cmdl_o);
+
+    bpo::options_description config_file_options_o = config_file_options_m();
+
+    bool all_files = true;
+    if (!vm_cmdl_o.count("config-file")) 
+        all_files = false;
+    if (!vm_cmdl_o.count("epot-file")) 
+        all_files = false;
+    if (!vm_cmdl_o.count("pdb-file")) 
+        all_files = false;
+
+    if (!all_files) {
+        std::cout<<"Usage:"<<std::endl<<" ./analysis --config-file config.ini --epot-file epot.dat --pdb-file pdb.dat"<<std::endl;
+        std::cout << command_line_options_o <<std::endl;
+        std::cout << config_file_options_o;
+        return nullptr;
+    }
+    
+    analysis_parameters_t *params = new analysis_parameters_t;
+
+    bpo::variables_map vm_o;
+    std::string epot_filename_o;
+    std::string pdb_filename_o;
+
+
+    run_parameters_t* vm_op = new run_parameters_t;
+    const char* config_filename = vm_cmdl_o["config-file"].as<std::string>().c_str();
+    store(parse_config_file(config_filename, config_file_options_o, true), *vm_op);
+    bpo::notify(*vm_op);
+    params->vm_op = vm_op;
+
+    params->epot_filename_o = vm_cmdl_o["epot-file"].as<std::string>();
+    params->pdb_filename_o = vm_cmdl_o["pdb-file"].as<std::string>();
+   
+    
+    return params;
+
+
+    
+
+}

@@ -11,6 +11,9 @@ config.o: config.cpp config.h
 simulation.o: simulation.cpp config.h
 #	$(CC) -c simulation.cpp $(LDFLAGS) -lboost_program_options
 
+
+
+
 # ecr: ecr.o
 # 	$(CC) -o ecr ecr.o $(LDFLAGS)
 # ecr.o: ecr.cpp

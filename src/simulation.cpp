@@ -85,7 +85,7 @@ void simulation( Geometry &geometry_o, MeshVectorField &bfield_o, physics_parame
     for( int a = 0; a < Nrounds; a++ ) {
 
 
-        geometry_o.save( to_string("geom-") + to_string(a) + to_string("-init.dat") );
+        geometry_o.save( to_string("geom-") + to_string(a) + to_string("-init.dat") , true );
         epot.save( to_string("epot-") + to_string(a) + to_string("-init.dat") );
         pdb.save( to_string("pdb-") + to_string(a) + to_string("-init.dat") );
 
@@ -173,9 +173,22 @@ void simulation( Geometry &geometry_o, MeshVectorField &bfield_o, physics_parame
         break;
     }
 
-    geometry_o.save( "geom.dat" );
-    epot.save( "epot.dat" );
-    pdb.save( "pdb.dat" );
+    //geometry_o.save( "geom.dat" );
+    //epot.save( "epot.dat" );
+    //pdb.save( "pdb.dat" );
+    MeshScalarField tdens( geometry_o );
+    pdb.build_trajectory_density_field( tdens );
+    int temp_a = 1;
+    GTKPlotter plotter( &temp_a, nullptr );
+    plotter.set_geometry( &geometry_o );
+    plotter.set_epot( &epot );
+    plotter.set_efield( &efield );
+	plotter.set_bfield( &bfield_o );
+    plotter.set_trajdens( &tdens );
+    plotter.set_particledatabase( &pdb );
+    plotter.new_geometry_plot_window();
+    plotter.run();
+
 
 }
 

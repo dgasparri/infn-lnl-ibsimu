@@ -38,6 +38,12 @@ struct physics_parameters_t {
 
 };
 
+struct analysis_parameters_t {
+    bpo::variables_map *vm_op;
+    std::string epot_filename_o;
+    std::string pdb_filename_o;
+};
+
 
 bpo::options_description config_file_options_m(); 
 
@@ -65,3 +71,4 @@ message_type_e message_threshold_m(bpo::variables_map &vm_o, message_type_e defa
 physics_parameters_t physics_parameters_m(bpo::variables_map &vm_o);
 
 run_parameters_t* run_parameters_m(int argc, char *argv[]); 
+analysis_parameters_t* analysis_parameters_m(int argc, char *argv[]); 
