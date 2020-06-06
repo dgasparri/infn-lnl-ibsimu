@@ -21,12 +21,12 @@
 
 
 
-void analysis(Geometry &geometry_o, std::string &epot_filename_o, std::string &pdb_filename_o)
+void analysis(Geometry &geometry_o, std::string &epot_filename_o, std::string &pdb_filename_o, std::string bfield_filename_o)
 {
 
-    std::ifstream is_epot(epot_filename);
+    std::ifstream is_epot(epot_filename_o);
     if( !is_epot.good() )
-	    throw( Error( ERROR_LOCATION, (string)"couldn\'t open file \'" + epot_filename + "\'" ) );
+	    throw( Error( ERROR_LOCATION, (std::string)"couldn\'t open file \'" + epot_filename_o + "\'" ) );
     
     EpotField epot( is_epot, geometry_o );
     is_epot.close();
@@ -37,16 +37,16 @@ void analysis(Geometry &geometry_o, std::string &epot_filename_o, std::string &p
 				     FIELD_EXTRAPOLATE, FIELD_EXTRAPOLATE };
     efield.set_extrapolation( efldextrpl );
 
-    std::ifstream is_pdb(pdb_filename);
+    std::ifstream is_pdb(pdb_filename_o);
     if( !is_pdb.good() )
-	throw( Error( ERROR_LOCATION, (string)"couldn\'t open file \'" + pdb_filename + "\'" ) );
+	throw( Error( ERROR_LOCATION, (std::string)"couldn\'t open file \'" + pdb_filename_o + "\'" ) );
     ParticleDataBase3D pdb( is_pdb, geometry_o );
     is_pdb.close();
 
     VectorField *bfield = NULL;
     if( false ) {
     	bool fout[3] = {true, true, true};
-	    MeshVectorField *mesh_bfield = new MeshVectorField( MODE_3D, fout, 1.0e-3, 1.0, argv[4] );
+	    MeshVectorField *mesh_bfield = new MeshVectorField( MODE_3D, fout, 1.0e-3, 1.0, bfield_filename_o );
 	    field_extrpl_e bfldextrpl[6] = { FIELD_ZERO, FIELD_ZERO, 
 					 FIELD_ZERO, FIELD_ZERO, 
 					 FIELD_ZERO, FIELD_ZERO };
@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
     if(! analysis_parameters_op)
         return 0; //No config file with run parameters provided
 
-    run_parameters_t *run_parameters_op = analysis_parameters_op->vm_o;
+    run_parameters_t *run_parameters_op = analysis_parameters_op->vm_op;
 
     try {
     	ibsimu.set_message_threshold( message_threshold_m(*run_parameters_op, MSG_VERBOSE), 1 );
