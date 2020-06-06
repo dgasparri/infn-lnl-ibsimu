@@ -37,7 +37,7 @@ void add_beam( Geometry &geom, ParticleDataBaseCyl &pdb, double q, double m,
 				 geom.origo(0), r0 );
 }
 
-void simulation( Geometry &geometry_o, MeshVectorField &bfield_o )
+void simulation( Geometry &geometry_o, MeshVectorField &bfield_o, physics_parameters_t &phy_params_o )
 {
     double q = 6;
     double m = 15;
@@ -62,8 +62,13 @@ void simulation( Geometry &geometry_o, MeshVectorField &bfield_o )
     efield.set_extrapolation( extrapl );
   
     EpotBiCGSTABSolver solver( geometry_o );
-    InitialPlasma init_plasma( AXIS_X, 0.5e-3 );
-    solver.set_initial_plasma( Up, &init_plasma );
+    
+    //http://ibsimu.sourceforge.net/manual_1_0_6/classInitialPlasma.html
+    //Initial plasma exists at coordinates less than val in axis direction
+    InitialPlasma initial_plasma_m( AXIS_X, 0.5e-3 );
+    solver.set_initial_plasma( 
+        phy_params_o.plasma_potential_Up, 
+        &initial_plasma_m );
 
     ParticleDataBaseCyl pdb( geometry_o );
     bool pmirror[6] = {false, false,
@@ -71,25 +76,51 @@ void simulation( Geometry &geometry_o, MeshVectorField &bfield_o )
 		       false, false};
     pdb.set_mirror( pmirror );
 
+
+
     for( int a = 0; a < Nrounds; a++ ) {
+
+
+        geometry_o.save( std::string("geom-") + std::string(a) + std::string("-init.dat") );
+        epot.save( std::string("epot-") + std::string(a) + std::string("-init.dat") );
+        pdb.save( std::string("pdb-") + std::string(a) + std::string("-init.dat") );
+
 
         ibsimu.message(1) << "Major cycle " << a << "\n";
         ibsimu.message(1) << "-----------------------\n";
 
         if( a == 1 ) {
-            double rhoe = pdb.get_rhosum();
-            solver.set_pexp_plasma( rhoe, Te, Up );
+            double electron_charge_density_rhoe = pdb.get_rhosum();
+            solver.set_pexp_plasma( 
+                electron_charge_density_rhoe, 
+                phy_params_o.electron_temperature_Te, 
+                phy_params_o.plasma_potential_Up );
         }
+
 
         solver.solve( epot, scharge_ave );
         if( solver.get_iter() == 0 ) {
             ibsimu.message(1) << "No iterations, breaking major cycle\n";
             break;
         }
-        
+
+        geometry_o.save( std::string("geom-") + std::string(a) + std::string("-doposolve.dat") );
+        epot.save( std::string("epot-") + std::string(a) + std::string("-doposolve.dat") );
+        pdb.save( std::string("pdb-") + std::string(a) + std::string("-doposolve.dat") );
+
         efield.recalculate();
 
+        geometry_o.save( std::string("geom-") + std::string(a) + std::string("-doporecalculate.dat") );
+        epot.save( std::string("epot-") + std::string(a) + std::string("-doporecalculate.dat") );
+        pdb.save( std::string("pdb-") + std::string(a) + std::string("-doporecalculate.dat") );
+
         pdb.clear();
+
+        geometry_o.save( std::string("geom-") + std::string(a) + std::string("-dopopdbclear.dat") );
+        epot.save( std::string("epot-") + std::string(a) + std::string("-dopopdbclear.dat") );
+        pdb.save( std::string("pdb-") + std::string(a) + std::string("-dopopdbclear.dat") );
+
+
         add_beam( geometry_o, pdb, 1, 15, Jtotal, 0.050 );
         add_beam( geometry_o, pdb, 2, 15, Jtotal, 0.100 );
         add_beam( geometry_o, pdb, 3, 15, Jtotal, 0.200 );
@@ -97,8 +128,16 @@ void simulation( Geometry &geometry_o, MeshVectorField &bfield_o )
         add_beam( geometry_o, pdb, 5, 15, Jtotal, 0.250 );
         add_beam( geometry_o, pdb, 6, 15, Jtotal, 0.085 );
         add_beam( geometry_o, pdb, 7, 15, Jtotal, 0.005 );
+        geometry_o.save( std::string("geom-") + std::string(a) + std::string("-dopoaddbean.dat") );
+        epot.save( std::string("epot-") + std::string(a) + std::string("-dopoaddbean.dat") );
+        pdb.save( std::string("pdb-") + std::string(a) + std::string("-dopoaddbean.dat") );
+
         //add_beam( geometry_o, pdb, 6, 15, Jtotal, 1.0 );
         pdb.iterate_trajectories( scharge, efield, bfield_o );
+
+        geometry_o.save( std::string("geom-") + std::string(a) + std::string("-dopopdbtraj.dat") );
+        epot.save( std::string("epot-") + std::string(a) + std::string("-dopopdbtraj.dat") );
+        pdb.save( std::string("pdb-") + std::string(a) + std::string("-dopopdbtraj.dat") );
 
         
         TrajectoryDiagnosticData tdata;
@@ -127,25 +166,13 @@ void simulation( Geometry &geometry_o, MeshVectorField &bfield_o )
             scharge_ave(b) = sc_alpha*scharge(b) + sc_beta*scharge_ave(b);
             }
         }
+        break;
     }
 
     geometry_o.save( "geom.dat" );
     epot.save( "epot.dat" );
     pdb.save( "pdb.dat" );
 
-    MeshScalarField tdens( geometry_o );
-    pdb.build_trajectory_density_field( tdens );
-
-    GTKPlotter plotter( argc, argv );
-    plotter.set_geometry( &geometry_o );
-    plotter.set_epot( &epot );
-    plotter.set_particledatabase( &pdb );
-    plotter.set_efield( &efield );
-    plotter.set_trajdens( &tdens );
-    plotter.set_bfield( &bfield );
-    plotter.set_scharge( &scharge );
-    plotter.new_geometry_plot_window();
-    plotter.run();
 }
 
 
@@ -173,7 +200,9 @@ int main(int argc, char *argv[])
 
         geometry_op->build_mesh();
 
-        simulation(*geometry_op, *bfield_op)
+        physics_parameters_t phy_pars = physics_parameters_m(*run_parameters_op);
+
+        simulation(*geometry_op, *bfield_op, phy_pars)
     	
     } catch( Error e ) {
 	    e.print_error_message( ibsimu.message(0) );

@@ -30,6 +30,14 @@ typedef std::string bound_type_string_t;
 typedef bound_e bound_type_t;
 typedef bpo::variables_map run_parameters_t;
 
+struct physics_parameters_t {
+    //double electron_charge_density_rhoe;
+    double electron_temperature_Te;
+    double plasma_potential_Up;
+
+};
+
+
 bpo::options_description config_file_options_m(); 
 
 bpo::options_description command_line_options_m();
@@ -52,5 +60,7 @@ MeshVectorField* bfield_m(Geometry &geometry_o, bpo::variables_map &vm_o);
 
 int num_cores_m(bpo::variables_map &vm_o, int default_v = 2);
 message_type_e message_threshold_m(bpo::variables_map &vm_o, message_type_e default_v);
+
+physics_parameters_t physics_parameters_m(bpo::variable_maps &vm_o)
 
 run_parameters_t* run_parameters_m(int argc, char *argv[]); 
