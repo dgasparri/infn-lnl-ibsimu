@@ -59,7 +59,7 @@ bpo::options_description config_file_options_m()
         ("bfield-translate-y", bpo::value<geometry_value_t>(), "bfield translate y")
         ("bfield-translate-z", bpo::value<geometry_value_t>(), "bfield translate z")
 
-
+        ("ground-voltage", bpo::value<voltage_t>(), "ground voltage V")
         ("electron-temperature-Te", bpo::value<double>(), "Electron Temperature Te")
         ("plasma-potential-Up", bpo::value<double>(), "Plasma Potential Up")
 
@@ -282,13 +282,15 @@ message_type_e message_threshold_m(bpo::variables_map &vm_o, message_type_e defa
 }
 
 
-physics_parameters_t physics_parameters_m(bpo::variable_maps &vm_o)
+physics_parameters_t physics_parameters_m(bpo::variables_map &vm_o)
 {
     double Te = vm_o["electron-temperature-Te"].as<double>();
     double Up = vm_o["plasma-potential-Up"].as<double>();
+    voltage_t gndV = vm_o["ground-voltage"].as<voltage_t>();
     physics_parameters_t phypars;
     phypars.electron_temperature_Te = Te;
     phypars.plasma_potential_Up = Up;
+    phypars.ground_V = gndV;
     return phypars;
 }
 

@@ -1,5 +1,7 @@
 #include <fstream>
 #include <iostream>
+#include <vector>
+
 #include <ibsimu.hpp>
 #include <error.hpp>
 #include <geometry.hpp>
@@ -21,10 +23,10 @@ double nperh = 500;
 double r0 = 10e-3;
 double Npart = r0/h*nperh;
 double Jtotal = 30.0;
-double Te = 10.0;
+
 double E0 = 10.0;
 double Tt = 1.0;
-double Up = 20.0;
+
 double sc_alpha = 0.7;
 
 
@@ -43,7 +45,9 @@ void simulation( Geometry &geometry_o, MeshVectorField &bfield_o, physics_parame
     double m = 15;
     double B0 = 0.9;
     double r_aperture = 4.0e-3;
-    double vz = sqrt(-2.0*q*CHARGE_E*Vgnd/(m*MASS_U));
+    double vz = sqrt(-2.0*q*CHARGE_E*
+                    phy_params_o.ground_V
+                    /(m*MASS_U));
     double Erms = q*CHARGE_E*B0*r_aperture*r_aperture/(8*m*MASS_U*vz);
     ibsimu.message(1) << "Erms = "<< Erms << " m rad\n";
 
@@ -81,9 +85,9 @@ void simulation( Geometry &geometry_o, MeshVectorField &bfield_o, physics_parame
     for( int a = 0; a < Nrounds; a++ ) {
 
 
-        geometry_o.save( std::string("geom-") + std::string(a) + std::string("-init.dat") );
-        epot.save( std::string("epot-") + std::string(a) + std::string("-init.dat") );
-        pdb.save( std::string("pdb-") + std::string(a) + std::string("-init.dat") );
+        geometry_o.save( to_string("geom-") + to_string(a) + to_string("-init.dat") );
+        epot.save( to_string("epot-") + to_string(a) + to_string("-init.dat") );
+        pdb.save( to_string("pdb-") + to_string(a) + to_string("-init.dat") );
 
 
         ibsimu.message(1) << "Major cycle " << a << "\n";
@@ -104,21 +108,21 @@ void simulation( Geometry &geometry_o, MeshVectorField &bfield_o, physics_parame
             break;
         }
 
-        geometry_o.save( std::string("geom-") + std::string(a) + std::string("-doposolve.dat") );
-        epot.save( std::string("epot-") + std::string(a) + std::string("-doposolve.dat") );
-        pdb.save( std::string("pdb-") + std::string(a) + std::string("-doposolve.dat") );
+        geometry_o.save( to_string("geom-") + to_string(a) + to_string("-doposolve.dat") );
+        epot.save( to_string("epot-") + to_string(a) + to_string("-doposolve.dat") );
+        pdb.save( to_string("pdb-") + to_string(a) + to_string("-doposolve.dat") );
 
         efield.recalculate();
 
-        geometry_o.save( std::string("geom-") + std::string(a) + std::string("-doporecalculate.dat") );
-        epot.save( std::string("epot-") + std::string(a) + std::string("-doporecalculate.dat") );
-        pdb.save( std::string("pdb-") + std::string(a) + std::string("-doporecalculate.dat") );
+        geometry_o.save( to_string("geom-") + to_string(a) + to_string("-doporecalculate.dat") );
+        epot.save( to_string("epot-") + to_string(a) + to_string("-doporecalculate.dat") );
+        pdb.save( to_string("pdb-") + to_string(a) + to_string("-doporecalculate.dat") );
 
         pdb.clear();
 
-        geometry_o.save( std::string("geom-") + std::string(a) + std::string("-dopopdbclear.dat") );
-        epot.save( std::string("epot-") + std::string(a) + std::string("-dopopdbclear.dat") );
-        pdb.save( std::string("pdb-") + std::string(a) + std::string("-dopopdbclear.dat") );
+        geometry_o.save( to_string("geom-") + to_string(a) + to_string("-dopopdbclear.dat") );
+        epot.save( to_string("epot-") + to_string(a) + to_string("-dopopdbclear.dat") );
+        pdb.save( to_string("pdb-") + to_string(a) + to_string("-dopopdbclear.dat") );
 
 
         add_beam( geometry_o, pdb, 1, 15, Jtotal, 0.050 );
@@ -128,30 +132,30 @@ void simulation( Geometry &geometry_o, MeshVectorField &bfield_o, physics_parame
         add_beam( geometry_o, pdb, 5, 15, Jtotal, 0.250 );
         add_beam( geometry_o, pdb, 6, 15, Jtotal, 0.085 );
         add_beam( geometry_o, pdb, 7, 15, Jtotal, 0.005 );
-        geometry_o.save( std::string("geom-") + std::string(a) + std::string("-dopoaddbean.dat") );
-        epot.save( std::string("epot-") + std::string(a) + std::string("-dopoaddbean.dat") );
-        pdb.save( std::string("pdb-") + std::string(a) + std::string("-dopoaddbean.dat") );
+        geometry_o.save( to_string("geom-") + to_string(a) + to_string("-dopoaddbean.dat") );
+        epot.save( to_string("epot-") + to_string(a) + to_string("-dopoaddbean.dat") );
+        pdb.save( to_string("pdb-") + to_string(a) + to_string("-dopoaddbean.dat") );
 
         //add_beam( geometry_o, pdb, 6, 15, Jtotal, 1.0 );
         pdb.iterate_trajectories( scharge, efield, bfield_o );
 
-        geometry_o.save( std::string("geom-") + std::string(a) + std::string("-dopopdbtraj.dat") );
-        epot.save( std::string("epot-") + std::string(a) + std::string("-dopopdbtraj.dat") );
-        pdb.save( std::string("pdb-") + std::string(a) + std::string("-dopopdbtraj.dat") );
+        geometry_o.save( to_string("geom-") + to_string(a) + to_string("-dopopdbtraj.dat") );
+        epot.save( to_string("epot-") + to_string(a) + to_string("-dopopdbtraj.dat") );
+        pdb.save( to_string("pdb-") + to_string(a) + to_string("-dopopdbtraj.dat") );
 
         
         TrajectoryDiagnosticData tdata;
-        vector<trajectory_diagnostic_e> diag;
+        std::vector<trajectory_diagnostic_e> diag;
         diag.push_back( DIAG_R );
         diag.push_back( DIAG_RP );
         diag.push_back( DIAG_AP );
         diag.push_back( DIAG_CURR );
-        pdb.trajectories_at_plane( tdata, AXIS_X, geom.max(0), diag );
+        pdb.trajectories_at_plane( tdata, AXIS_X, geometry_o.max(0), diag );
         EmittanceConv emit( 100, 100, 
                     tdata(0).data(), tdata(1).data(), 
                     tdata(2).data(), tdata(3).data() );
 
-        ofstream dataout( "emit.txt", ios_base::app );
+        std::ofstream dataout( "emit.txt", std::ios_base::app );
         dataout << emit.alpha() << " "
             << emit.beta() << " "
             << emit.epsilon() << "\n";
@@ -202,7 +206,7 @@ int main(int argc, char *argv[])
 
         physics_parameters_t phy_pars = physics_parameters_m(*run_parameters_op);
 
-        simulation(*geometry_op, *bfield_op, phy_pars)
+        simulation(*geometry_op, *bfield_op, phy_pars);
     	
     } catch( Error e ) {
 	    e.print_error_message( ibsimu.message(0) );
