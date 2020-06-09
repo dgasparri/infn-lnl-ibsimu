@@ -10,14 +10,13 @@ g++ -g `pkg-config --cflags ibsimu-1.0.6dev` -c -o config.o config.cpp -lboost_p
 #include "config.h"
 
 
+namespace ic_config = ibsimu_client::config;
 
 
 
 
 
-
-
-int num_cores_m(bpo::variables_map &vm_o, int default_v)
+int ic_config::num_cores_m(bpo::variables_map &vm_o, int default_v)
 {
     if(vm_o.count("ibsimu-cores"))
         return vm_o["ibsimu-cores"].as<int>();    
@@ -25,7 +24,7 @@ int num_cores_m(bpo::variables_map &vm_o, int default_v)
         return default_v;
 }
 
-message_type_e message_threshold_m(bpo::variables_map &vm_o, message_type_e default_v)
+message_type_e ic_config::message_threshold_m(bpo::variables_map &vm_o, message_type_e default_v)
 {
     if(vm_o.count("ibsimu-message-threshold")) {
         const std::string &s = vm_o["ibsimu-message-threshold"].as<std::string>();
@@ -37,9 +36,9 @@ message_type_e message_threshold_m(bpo::variables_map &vm_o, message_type_e defa
 }
 
 
-
 //argc == -1 -> prints help
-ibsimu_client::parameters_commandline_t* ibsimu_client::parameters_commandline_m(int argc, char *argv[])
+//parameters_commandline_m
+ibsimu_client::parameters_commandline_t* ic_config::parameters_commandline_m(int argc, char *argv[])
 {
     bpo::options_description command_line_options_o("Command line options");
     command_line_options_o.add_options()
@@ -84,7 +83,8 @@ ibsimu_client::parameters_commandline_t* ibsimu_client::parameters_commandline_m
 } 
 
 // configfile_o.empty() -> print help
-bpo::variables_map* ibsimu_client::parameters_configfile_m(std::string config_filename_o) 
+// parameters_configfile_m
+bpo::variables_map* ic_config::parameters_configfile_m(std::string config_filename_o) 
 {
 
 
@@ -164,8 +164,6 @@ bpo::variables_map* ibsimu_client::parameters_configfile_m(std::string config_fi
 }
 
 
-
-
 analysis_parameters_t* analysis_parameters_m(int argc, char *argv[]) 
 {
 
@@ -225,14 +223,14 @@ analysis_parameters_t* analysis_parameters_m(int argc, char *argv[])
 }
 
 
-void ibsimu_client::show_help()
+void ic_config::show_help()
 {
     parameters_commandline_m(-1, nullptr);
-    ibsimu_client::parameters_configfile_m(to_string(""));
+    parameters_configfile_m(to_string(""));
 }
 
-
-ibsimu_client::parameters_commandline_t* ibsimu_client::clean_runpath_m(std::string current_directory, parameters_commandline_t* cmdlp_op)
+//clean_runpath
+ibsimu_client::parameters_commandline_t* ic_config::clean_runpath_m(std::string current_directory, ibsimu_client::parameters_commandline_t* cmdlp_op)
 {
 
     bool run = !cmdlp_op->run_o.empty();
@@ -269,3 +267,9 @@ ibsimu_client::parameters_commandline_t* ibsimu_client::clean_runpath_m(std::str
     return cmdlp_op;
 
 }
+
+
+
+
+
+

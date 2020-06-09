@@ -9,7 +9,9 @@ g++ -g `pkg-config --cflags ibsimu-1.0.6dev` -c -o config.o config.cpp -lboost_p
 
 #include "config.h"
 
-bound_type_t bound_type_m(const bound_type_string_t &s) 
+namespace ic_setup = ibsimu_client::setup
+
+bound_type_t ic_setup::bound_type_m(const bound_type_string_t &s) 
 {
     if(s == "BOUND_DIRICHLET")
         return BOUND_DIRICHLET;
@@ -22,7 +24,7 @@ bound_type_t bound_type_m(const bound_type_string_t &s)
 
 
 
-geom_mode_e geometry_mode_m(std::string gm_string_o)
+geom_mode_e ic_setup::geometry_mode_m(std::string gm_string_o)
 {
     geom_mode_e geometry_mode;
     if (gm_string_o == "MODE_3D")
@@ -38,7 +40,7 @@ geom_mode_e geometry_mode_m(std::string gm_string_o)
     return geometry_mode;
 }
 
-Geometry* geometry_m(bpo::variables_map &vm_o) 
+Geometry* ic_setup::geometry_m(bpo::variables_map &vm_o) 
 {
 
     const std::string &gm_string_o = vm_o["geometry-mode"].as<std::string>();
@@ -71,7 +73,7 @@ Geometry* geometry_m(bpo::variables_map &vm_o)
 }
 
 
-void wall_bound_m(Geometry &geometry_o, bpo::variables_map &vm_o)
+void ic_setup::wall_bound_m(Geometry &geometry_o, bpo::variables_map &vm_o)
 {
     //ITERATING through [wall-1-bound-type... wall-6-bound-type]
     
@@ -93,7 +95,7 @@ void wall_bound_m(Geometry &geometry_o, bpo::variables_map &vm_o)
 }
 
 
-void add_solid_m(Geometry &geometry_o,
+void ic_setup::add_solid_m(Geometry &geometry_o,
                  int progressive, 
                  MyDXFFile *dxffile_op,
                  const std::string &layer_name_o, 
@@ -112,7 +114,7 @@ void add_solid_m(Geometry &geometry_o,
 
 
 
-void dxfsolids_m(Geometry &geometry_o, bpo::variables_map &vm_o) 
+void ic_setup::dxfsolids_m(Geometry &geometry_o, bpo::variables_map &vm_o) 
 {
 
     const std::string &dxf_filename_o = vm_o["dxf-filename"].as<std::string>();
@@ -161,7 +163,7 @@ void dxfsolids_m(Geometry &geometry_o, bpo::variables_map &vm_o)
 
 
 
-MeshVectorField *bfield_m(Geometry &geometry_o, bpo::variables_map &vm_o)
+MeshVectorField* ic_setup::bfield_m(Geometry &geometry_o, bpo::variables_map &vm_o)
 {
     const std::string &bfield_mode_string_o = vm_o["bfield-mode"].as<std::string>();
     const std::string &bfield_filename_o = vm_o["bfield-filename"].as<std::string>();
@@ -193,7 +195,7 @@ MeshVectorField *bfield_m(Geometry &geometry_o, bpo::variables_map &vm_o)
 }
 
 
-int num_cores_m(bpo::variables_map &vm_o, int default_v)
+int ic_setup::num_cores_m(bpo::variables_map &vm_o, int default_v)
 {
     if(vm_o.count("ibsimu-cores"))
         return vm_o["ibsimu-cores"].as<int>();    

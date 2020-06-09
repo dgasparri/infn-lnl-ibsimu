@@ -52,29 +52,31 @@ struct analysis_parameters_t {
 
 
 
-bpo::options_description command_line_options_m();
-geom_mode_e geometry_mode_m(std::string gm_string_o);
-Geometry* geometry_m(bpo::variables_map &vm_o) ;
+namespace ibsimu_client::setup 
+{
+    bound_type_t bound_type_m(const bound_type_string_t &s);
+    geom_mode_e geometry_mode_m(std::string gm_string_o);
+    Geometry* geometry_m(bpo::variables_map &vm_o) ;
 
-bound_type_t bound_type_m(const bound_type_string_t &s);
-void wall_bound_m(Geometry &geometry_o, bpo::variables_map &vm_o);
-void add_solid_m(Geometry &geometry_o,
-                 int progressive, 
-                 MyDXFFile *dxffile_op,
-                 const std::string &layer_name_o, 
-                 dxf_scale_factor_t dxf_scale_factor,
-                 bound_type_t bound_type,
-                 voltage_t  bound_V  );
+    void wall_bound_m(Geometry &geometry_o, bpo::variables_map &vm_o);
+    void add_solid_m(Geometry &geometry_o,
+                    int progressive, 
+                    MyDXFFile *dxffile_op,
+                    const std::string &layer_name_o, 
+                    dxf_scale_factor_t dxf_scale_factor,
+                    bound_type_t bound_type,
+                    voltage_t  bound_V  );
+
+    void dxfsolids_m(Geometry &geometry_o, bpo::variables_map &vm_o);
+    MeshVectorField* bfield_m(Geometry &geometry_o, bpo::variables_map &vm_o);
 
 
-void dxfsolids_m(Geometry &geometry_o, bpo::variables_map &vm_o);
-MeshVectorField* bfield_m(Geometry &geometry_o, bpo::variables_map &vm_o);
+}
 
-int num_cores_m(bpo::variables_map &vm_o, int default_v = 2);
-message_type_e message_threshold_m(bpo::variables_map &vm_o, message_type_e default_v);
+
+
 
 physics_parameters_t* physics_parameters_m(bpo::variables_map &vm_o);
-
 
 namespace ibsimu_client {
 
@@ -88,11 +90,21 @@ namespace ibsimu_client {
         loop_output_t loop_output;
     };
 
-    
+
+}
+
+
+namespace ibsimu_client::config {
+
+   
     bpo::variables_map* parameters_configfile_m(std::string config_filename_o); 
-    parameters_commandline_t* parameters_commandline_m(int argc, char *argv[]);
-    parameters_commandline_t* clean_runpath_m(std::string current_directory, parameters_commandline_t* cmdlp_op);
+    ibsimu_client::parameters_commandline_t* parameters_commandline_m(int argc, char *argv[]);
+    ibsimu_client::parameters_commandline_t* clean_runpath_m(std::string current_directory, ibsimu_client::parameters_commandline_t* cmdlp_op);
     void show_help();
+
+    int num_cores_m(bpo::variables_map &vm_o, int default_v = 2);
+    message_type_e message_threshold_m(bpo::variables_map &vm_o, message_type_e default_v);
+
 
 }
 
