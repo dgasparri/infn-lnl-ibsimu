@@ -261,84 +261,49 @@ int main(int argc, char *argv[])
 
     remove( "emit.txt" );
 
-    ibsimu_client::simulation::parameters_commandline_t* cmdlp_op = 
-            ibsimu_client::simulation::parameters_commandline_m(argc, argv);
+    ibsimu_client::parameters_commandline_t* cmdlp_op = 
+            ibsimu_client::parameters_commandline_m(argc, argv);
     
-    std::string output_dir_o;
-    std::string config_file_o;
     const int buffer_len = 2500;
     char current_directory[buffer_len];
     getcwd(current_directory, buffer_len);
-    std::cout<<"Current directory: "<<current_directory<<std::endl;
-    bool run = !cmdlp_op->run_o.empty();
-    bool config = !cmdlp_op->config_filename_o.empty();
-    /*
-        !run & !config -> show help
-        !run -> run to current dir 
-        run -> clean run directory
-        run & !config -> set config to rundir/config.ini
-        run & config -> if config[0]!='/' set config to rundir+config
-        
-        
-        
-    */
 
-    if (!run && !config) {
-        ibsimu_client::simulation::show_help();
+
+    if (!ibsimu_client::clean_runpath_m(current_directory, cmdlp_op)) 
+    {
+        ibsimu_client::show_help();
         return 0;
     }
 
-    if(!run) {
-        cmdlp_op->run_o = to_string(current_directory) + "/";
-    } else {
-        if(cmdlp_op->run_o[0] != '/') 
-            cmdlp_op->run_o = to_string(current_directory) + "/" + cmdlp_op->run_o ;
-        std::cout<<cmdlp_op->run_o.find_last_of('/')<<cmdlp_op->run_o.length()<<std::endl;
-        
-        if ( cmdlp_op->run_o.find_last_of('/') != cmdlp_op->run_o.length() -1)
-            cmdlp_op->run_o.append("/");
-    }
 
-    if(!config) {
-        cmdlp_op->config_filename_o = to_string("config.ini");
-    }
-
-    cmdlp_op->config_filename_o = cmdlp_op->run_o + cmdlp_op->config_filename_o;
-
-
-
+    std::cout<<"Current directory: "<<current_directory<<std::endl;
     std::cout<<"Run Directory: "<<cmdlp_op->run_o<<std::endl;
-    std::cout<<"Config filename: "<<cmdlp_op->run_o<<std::endl;
+    std::cout<<"Config filename: "<<cmdlp_op->config_filename_o<<std::endl;
 
     bpo::variables_map* params_op;
     try {
         params_op = ibsimu_client::parameters_configfile_m(cmdlp_op->config_filename_o);
     } catch (Error e) {
-        ibsimu_client::simulation::show_help();
+        e.print_error_message( ibsimu.message( 0 ) );
+        std::cout<<"--help for help"<<std::endl;
         return 1;
     }
     
 
-/*
-    run_parameters_t *run_parameters_op;
-    run_parameters_op = run_parameters_m(argc, argv);
-    if(! run_parameters_op)
-        return 0; //No config file with run parameters provided
-
     try {
-    	ibsimu.set_message_threshold( message_threshold_m(*run_parameters_op, MSG_VERBOSE), 1 );
-	    ibsimu.set_thread_count( num_cores_m(*run_parameters_op, 2) );
+    	ibsimu.set_message_threshold( message_threshold_m(*params_op, MSG_VERBOSE), 1 );
+	    ibsimu.set_thread_count( num_cores_m(*params_op, 2) );
 
-        Geometry* geometry_op = geometry_m(*run_parameters_op); 
+        Geometry* geometry_op = geometry_m(*params_op); 
 
-        wall_bound_m(*geometry_op, *run_parameters_op);
-        dxfsolids_m(*geometry_op, *run_parameters_op);
+        wall_bound_m(*geometry_op, *params_op);
+        dxfsolids_m(*geometry_op, *params_op);
 
-        MeshVectorField* bfield_op = bfield_m(*geometry_op, *run_parameters_op);
+        MeshVectorField* bfield_op = bfield_m(*geometry_op, *params_op);
 
         geometry_op->build_mesh();
 
-        physics_parameters_t &phy_pars = *physics_parameters_m(*run_parameters_op);
+        physics_parameters_t &phy_pars = *physics_parameters_m(*params_op);
 
         simulation(*geometry_op, *bfield_op, phy_pars);
     	
@@ -346,6 +311,5 @@ int main(int argc, char *argv[])
 	    e.print_error_message( ibsimu.message(0) );
     }
 
-  */  
 
 }

@@ -39,7 +39,7 @@ message_type_e message_threshold_m(bpo::variables_map &vm_o, message_type_e defa
 
 
 //argc == -1 -> prints help
-ibsimu_client::simulation::parameters_commandline_t* ibsimu_client::simulation::parameters_commandline_m(int argc, char *argv[])
+ibsimu_client::parameters_commandline_t* ibsimu_client::parameters_commandline_m(int argc, char *argv[])
 {
     bpo::options_description command_line_options_o("Command line options");
     command_line_options_o.add_options()
@@ -59,8 +59,8 @@ ibsimu_client::simulation::parameters_commandline_t* ibsimu_client::simulation::
     bpo::variables_map vm_cmdl_o;
     store(parse_command_line(argc, argv, command_line_options_o), vm_cmdl_o);
 
-    ibsimu_client::simulation::parameters_commandline_t* options_op =
-            new ibsimu_client::simulation::parameters_commandline_t; 
+    ibsimu_client::parameters_commandline_t* options_op =
+            new ibsimu_client::parameters_commandline_t; 
     
     options_op->run_o = vm_cmdl_o["run"].as<std::string>();
     options_op->config_filename_o = vm_cmdl_o["config-file"].as<std::string>();
@@ -172,7 +172,7 @@ analysis_parameters_t* analysis_parameters_m(int argc, char *argv[])
     bpo::options_description command_line_options_o("Command line options");
     command_line_options_o.add_options()
         ("help", "print help message")
-        ("config-file", bpo::value<std::string>(), "configuration file, path relative to executable")
+        ("config-file", bpo::value<std::string>(), "configuration file, path relative to current directory")
         ("epot-file", bpo::value<std::string>(), "epot file, path relative to executable")
         ("pdb-file", bpo::value<std::string>(), "pdb file, path relative to executable")
         ("bfield-file", bpo::value<std::string>(), "bfield file, path relative to executable")
@@ -225,8 +225,47 @@ analysis_parameters_t* analysis_parameters_m(int argc, char *argv[])
 }
 
 
-void ibsimu_client::simulation::show_help()
+void ibsimu_client::show_help()
 {
     parameters_commandline_m(-1, nullptr);
     ibsimu_client::parameters_configfile_m(to_string(""));
+}
+
+
+ibsimu_client::parameters_commandline_t* ibsimu_client::clean_runpath_m(std::string current_directory, parameters_commandline_t* cmdlp_op)
+{
+
+    bool run = !cmdlp_op->run_o.empty();
+    bool config = !cmdlp_op->config_filename_o.empty();
+    /*
+        !run & !config -> show help
+        !run -> run to current dir 
+        run -> clean run directory
+        (run &) !config -> set config to rundir/config.ini
+        (run &) config -> if config[0]!='/' set config to rundir+config
+
+    */
+
+    if (!run && !config) 
+        return nullptr;
+
+    if(!run) {
+        cmdlp_op->run_o = to_string(current_directory) + "/";
+    } 
+
+    if(cmdlp_op->run_o[0] != '/') 
+        cmdlp_op->run_o = to_string(current_directory) + "/" + cmdlp_op->run_o ;
+    std::cout<<cmdlp_op->run_o.find_last_of('/')<<cmdlp_op->run_o.length()<<std::endl;
+    
+    if ( cmdlp_op->run_o.find_last_of('/') != cmdlp_op->run_o.length() -1)
+        cmdlp_op->run_o.append("/");
+
+    if(!config) {
+        cmdlp_op->config_filename_o = to_string("config.ini");
+    }
+    if(cmdlp_op->config_filename_o[0] != '/') 
+        cmdlp_op->config_filename_o = cmdlp_op->run_o + cmdlp_op->config_filename_o;
+
+    return cmdlp_op;
+
 }

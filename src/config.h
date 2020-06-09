@@ -50,9 +50,6 @@ struct analysis_parameters_t {
     std::string pdb_filename_o;
 };
 
-namespace ibsimu_client {
-    bpo::variables_map* parameters_configfile_m(std::string configfile_o);
-}
 
 
 bpo::options_description command_line_options_m();
@@ -79,7 +76,7 @@ message_type_e message_threshold_m(bpo::variables_map &vm_o, message_type_e defa
 physics_parameters_t* physics_parameters_m(bpo::variables_map &vm_o);
 
 
-namespace ibsimu_client::simulation {
+namespace ibsimu_client {
 
     enum run_output_t {OUT_NORMAL, OUT_EVOLUTION, OUT_BEGIN, OUT_VERBOSE};
     enum loop_output_t {LOOP_END, LOOP_VERBOSE};
@@ -92,7 +89,9 @@ namespace ibsimu_client::simulation {
     };
 
     
+    bpo::variables_map* parameters_configfile_m(std::string config_filename_o); 
     parameters_commandline_t* parameters_commandline_m(int argc, char *argv[]);
+    parameters_commandline_t* clean_runpath_m(std::string current_directory, parameters_commandline_t* cmdlp_op);
     void show_help();
 
 }
