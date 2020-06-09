@@ -261,6 +261,65 @@ int main(int argc, char *argv[])
 
     remove( "emit.txt" );
 
+    ibsimu_client::simulation::parameters_commandline_t* cmdlp_op = 
+            ibsimu_client::simulation::parameters_commandline_m(argc, argv);
+    
+    std::string output_dir_o;
+    std::string config_file_o;
+    const int buffer_len = 2500;
+    char current_directory[buffer_len];
+    getcwd(current_directory, buffer_len);
+    std::cout<<"Current directory: "<<current_directory<<std::endl;
+    bool run = !cmdlp_op->run_o.empty();
+    bool config = !cmdlp_op->config_filename_o.empty();
+    /*
+        !run & !config -> show help
+        !run -> run to current dir 
+        run -> clean run directory
+        run & !config -> set config to rundir/config.ini
+        run & config -> if config[0]!='/' set config to rundir+config
+        
+        
+        
+    */
+
+    if (!run && !config) {
+        ibsimu_client::simulation::show_help();
+        return 0;
+    }
+
+    if(!run) {
+        cmdlp_op->run_o = to_string(current_directory) + "/";
+    } else {
+        if(cmdlp_op->run_o[0] != '/') 
+            cmdlp_op->run_o = to_string(current_directory) + "/" + cmdlp_op->run_o ;
+        std::cout<<cmdlp_op->run_o.find_last_of('/')<<cmdlp_op->run_o.length()<<std::endl;
+        
+        if ( cmdlp_op->run_o.find_last_of('/') != cmdlp_op->run_o.length() -1)
+            cmdlp_op->run_o.append("/");
+    }
+
+    if(!config) {
+        cmdlp_op->config_filename_o = to_string("config.ini");
+    }
+
+    cmdlp_op->config_filename_o = cmdlp_op->run_o + cmdlp_op->config_filename_o;
+
+
+
+    std::cout<<"Run Directory: "<<cmdlp_op->run_o<<std::endl;
+    std::cout<<"Config filename: "<<cmdlp_op->run_o<<std::endl;
+
+    bpo::variables_map* params_op;
+    try {
+        params_op = ibsimu_client::parameters_configfile_m(cmdlp_op->config_filename_o);
+    } catch (Error e) {
+        ibsimu_client::simulation::show_help();
+        return 1;
+    }
+    
+
+/*
     run_parameters_t *run_parameters_op;
     run_parameters_op = run_parameters_m(argc, argv);
     if(! run_parameters_op)
@@ -287,6 +346,6 @@ int main(int argc, char *argv[])
 	    e.print_error_message( ibsimu.message(0) );
     }
 
-    
+  */  
 
 }

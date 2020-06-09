@@ -17,6 +17,7 @@
 
 #include <string>
 #include <vector>
+#include <unistd.h>
 
 namespace bpo = boost::program_options;
  
@@ -49,8 +50,8 @@ struct analysis_parameters_t {
     std::string pdb_filename_o;
 };
 
-namesapce ibsimu_client {
-    bpo::options_description options_description_configfile_m(); 
+namespace ibsimu_client {
+    bpo::variables_map* parameters_configfile_m(std::string configfile_o);
 }
 
 
@@ -79,22 +80,24 @@ physics_parameters_t* physics_parameters_m(bpo::variables_map &vm_o);
 
 
 namespace ibsimu_client::simulation {
-    struct parameters_commandline_simulation_t {
+
+    enum run_output_t {OUT_NORMAL, OUT_EVOLUTION, OUT_BEGIN, OUT_VERBOSE};
+    enum loop_output_t {LOOP_END, LOOP_VERBOSE};
+
+    struct parameters_commandline_t {
         std::string run_o;
         std::string config_filename_o;
-        enum run_output {OUT_NORMAL, OUT_EVOLUTION, OUT_BEGIN, OUT_VERBOSE};
-        enum loop_output {LOOP_END, LOOP_VERBOSE};
+        run_output_t run_output;
+        loop_output_t loop_output;
     };
 
-    bpo::options_description options_description_commandline_m();
-    parameters_commandline_simulation_o* parameters_commandline_m(int argc, char *argv[]);
-
-
+    
+    parameters_commandline_t* parameters_commandline_m(int argc, char *argv[]);
+    void show_help();
 
 }
 
 
 
 
-run_parameters_t* run_parameters_m(int argc, char *argv[]); 
 analysis_parameters_t* analysis_parameters_m(int argc, char *argv[]); 
