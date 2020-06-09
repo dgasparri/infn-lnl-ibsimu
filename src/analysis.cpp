@@ -21,51 +21,33 @@
 
 
 
-void analysis(Geometry &geometry_o, std::string &epot_filename_o, std::string &pdb_filename_o, std::string bfield_filename_o)
+void analysis(Geometry &geometry_o,EpotField &epot_o,ParticleDataBase &pdb_o, MeshVectorField &bfield_o, physics_parameters_t &phy_pars)
 {
 
-    std::ifstream is_epot(epot_filename_o);
-    if( !is_epot.good() )
-	    throw( Error( ERROR_LOCATION, (std::string)"couldn\'t open file \'" + epot_filename_o + "\'" ) );
-    
-    EpotField epot( is_epot, geometry_o );
-    is_epot.close();
-
-    EpotEfield efield( epot );
+    EpotEfield efield_o( epot_o );
     field_extrpl_e efldextrpl[6] = { FIELD_EXTRAPOLATE, FIELD_EXTRAPOLATE, 
-				     FIELD_EXTRAPOLATE, FIELD_EXTRAPOLATE, 
-				     FIELD_EXTRAPOLATE, FIELD_EXTRAPOLATE };
-    efield.set_extrapolation( efldextrpl );
+                    FIELD_EXTRAPOLATE, FIELD_EXTRAPOLATE, 
+                    FIELD_EXTRAPOLATE, FIELD_EXTRAPOLATE };
+    efield_o.set_extrapolation( efldextrpl );
 
-    std::ifstream is_pdb(pdb_filename_o);
-    if( !is_pdb.good() )
-	throw( Error( ERROR_LOCATION, (std::string)"couldn\'t open file \'" + pdb_filename_o + "\'" ) );
-    ParticleDataBase3D pdb( is_pdb, geometry_o );
-    is_pdb.close();
 
-    VectorField *bfield = NULL;
-    if( false ) {
-    	bool fout[3] = {true, true, true};
-	    MeshVectorField *mesh_bfield = new MeshVectorField( MODE_3D, fout, 1.0e-3, 1.0, bfield_filename_o );
-	    field_extrpl_e bfldextrpl[6] = { FIELD_ZERO, FIELD_ZERO, 
-					 FIELD_ZERO, FIELD_ZERO, 
-					 FIELD_ZERO, FIELD_ZERO };
-	    mesh_bfield->set_extrapolation( bfldextrpl );
-	    bfield = mesh_bfield;
-    }
+	// field_extrpl_e bfldextrpl[6] = { FIELD_ZERO, FIELD_ZERO, 
+	// 				 FIELD_ZERO, FIELD_ZERO, 
+	// 				 FIELD_ZERO, FIELD_ZERO };
+	// bfield_o->set_extrapolation( bfldextrpl );
 
-    MeshScalarField tdens( geometry_o );
-    pdb.build_trajectory_density_field( tdens );
+    MeshScalarField tdens_o( geometry_o );
+    pdb_o.build_trajectory_density_field( tdens_o );
 
     int temp_params = 0;
     GTKPlotter plotter( &temp_params, nullptr );
     plotter.set_geometry( &geometry_o );
-    plotter.set_epot( &epot );
-    plotter.set_efield( &efield );
-    //if( bfield )
-	//plotter.set_bfield( bfield );
-    plotter.set_trajdens( &tdens );
-    plotter.set_particledatabase( &pdb );
+    plotter.set_epot( &epot_o );
+    plotter.set_efield( &efield_o );
+    
+	plotter.set_bfield( &bfield_o );
+    plotter.set_trajdens( &tdens_o );
+    plotter.set_particledatabase( &pdb_o );
     plotter.new_geometry_plot_window();
     plotter.run();
 }
@@ -77,12 +59,12 @@ void analysis(Geometry &geometry_o, std::string &epot_filename_o, std::string &p
 int main(int argc, char *argv[]) 
 {
 
-    analysis_parameters_t *analysis_parameters_op;
-    analysis_parameters_op = analysis_parameters_m(argc, argv);
-    if(! analysis_parameters_op)
+    analysis_parameters_t *cmdl_parameters_op;
+    cmdl_parameters_op = analysis_parameters_m(argc, argv);
+    if(! cmdl_parameters_op)
         return 0; //No config file with run parameters provided
 
-    run_parameters_t *run_parameters_op = analysis_parameters_op->vm_op;
+    run_parameters_t *run_parameters_op = cmdl_parameters_op->vm_op;
 
     try {
     	ibsimu.set_message_threshold( message_threshold_m(*run_parameters_op, MSG_VERBOSE), 1 );
@@ -94,15 +76,43 @@ int main(int argc, char *argv[])
         dxfsolids_m(*geometry_op, *run_parameters_op);
 
         
-        /*
+        
         MeshVectorField* bfield_op = bfield_m(*geometry_op, *run_parameters_op);
 
         geometry_op->build_mesh();
 
-        physics_parameters_t phy_pars = physics_parameters_m(*run_parameters_op);
+        std::ifstream is_epot(cmdl_parameters_op->epot_filename_o);
+        if( !is_epot.good() )
+            throw( Error( ERROR_LOCATION, (std::string)"couldn\'t open file \'" + cmdl_parameters_op->epot_filename_o + "\'" ) );
+        
+        EpotField epot_o( is_epot, *geometry_op );
+        is_epot.close();
 
-        simulation(*geometry_op, *bfield_op, phy_pars);
-        */
+
+        std::ifstream is_pdb(cmdl_parameters_op->pdb_filename_o);
+        if( !is_pdb.good() )
+            throw( Error( ERROR_LOCATION, (std::string)"couldn\'t open file \'" + cmdl_parameters_op->pdb_filename_o + "\'" ) );
+
+        ParticleDataBase *pdb_op;
+        if(false) {
+            pdb_op = new ParticleDataBase3D( is_pdb, *geometry_op );
+        } else if(true) {
+            pdb_op = new ParticleDataBaseCyl( is_pdb, *geometry_op );
+        }
+        
+        
+        is_pdb.close();
+
+
+        physics_parameters_t &phy_pars = *physics_parameters_m(*run_parameters_op);
+
+        analysis(
+            *geometry_op,
+            epot_o,
+            *pdb_op,
+            *bfield_op, 
+            phy_pars);
+        
 
     	
     } catch( Error e ) {

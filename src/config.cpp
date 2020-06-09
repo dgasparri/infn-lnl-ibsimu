@@ -9,7 +9,7 @@ g++ -g `pkg-config --cflags ibsimu-1.0.6dev` -c -o config.o config.cpp -lboost_p
 
 #include "config.h"
 
-bpo::options_description config_file_options_m() 
+bpo::options_description ibsimu_client::options_description_configfile_m() 
 {
     bpo::options_description config_file_options_o("Config file options");
     config_file_options_o.add_options()
@@ -63,6 +63,10 @@ bpo::options_description config_file_options_m()
         ("electron-temperature-Te", bpo::value<double>(), "Electron Temperature Te")
         ("plasma-potential-Up", bpo::value<double>(), "Plasma Potential Up")
 
+        ("plasma-init-x", bpo::value<double>(), "Plasma starting point X")
+        ("plasma-init-y", bpo::value<double>(), "Plasma starting point Y")
+        ("plasma-init-z", bpo::value<double>(), "Plasma starting point Z")
+
 
 
     ;
@@ -75,7 +79,8 @@ bpo::options_description command_line_options_m()
     bpo::options_description command_line_options_o("Command line options");
     command_line_options_o.add_options()
         ("help", "print help message")
-        ("config-file", bpo::value<std::string>(), "configuration file with all the simulation parameters, path relative to executable");
+        ("config-file", bpo::value<std::string>(), "configuration file with all the simulation parameters, path relative to executable")
+        ;
 
     return command_line_options_o;
 }
@@ -230,7 +235,7 @@ void dxfsolids_m(Geometry &geometry_o, bpo::variables_map &vm_o)
 
 
 
-MeshVectorField* bfield_m(Geometry &geometry_o, bpo::variables_map &vm_o)
+MeshVectorField *bfield_m(Geometry &geometry_o, bpo::variables_map &vm_o)
 {
     const std::string &bfield_mode_string_o = vm_o["bfield-mode"].as<std::string>();
     const std::string &bfield_filename_o = vm_o["bfield-filename"].as<std::string>();
@@ -282,31 +287,73 @@ message_type_e message_threshold_m(bpo::variables_map &vm_o, message_type_e defa
 }
 
 
-physics_parameters_t physics_parameters_m(bpo::variables_map &vm_o)
+physics_parameters_t* physics_parameters_m(bpo::variables_map &vm_o)
 {
     double Te = vm_o["electron-temperature-Te"].as<double>();
     double Up = vm_o["plasma-potential-Up"].as<double>();
     voltage_t gndV = vm_o["ground-voltage"].as<voltage_t>();
-    physics_parameters_t phypars;
-    phypars.electron_temperature_Te = Te;
-    phypars.plasma_potential_Up = Up;
-    phypars.ground_V = gndV;
+    double plasma_init_x  = vm_o["plasma-init-x"].as<double>();
+    double plasma_init_y  = vm_o["plasma-init-y"].as<double>();
+    double plasma_init_z  = vm_o["plasma-init-z"].as<double>();
+    physics_parameters_t* phypars = new physics_parameters_t;
+    phypars->electron_temperature_Te = Te;
+    phypars->plasma_potential_Up = Up;
+    phypars->ground_V = gndV;
+    phypars->plasma_init_x  = plasma_init_x ;
+    phypars->plasma_init_y  = plasma_init_y ;
+    phypars->plasma_init_z  = plasma_init_z ;
     return phypars;
 }
 
 
-
-run_parameters_t* run_parameters_m(int argc, char *argv[]) 
+bpo::options_description options_commandline_simulation_m()
 {
-
     bpo::options_description command_line_options_o("Command line options");
     command_line_options_o.add_options()
         ("help", "print help message")
-        ("config-file", bpo::value<std::string>(), "configuration file, path relative to executable");
+        ("run", bpo::value<std::string>()->default_value(""), "directory containing the config.ini of the file. Output files will be written in that directory ")
+        ("config-file", bpo::value<std::string>()->default_value(""), "configuration file, path relative to executable")
+        ("run-output", bpo::value<std::string>()->default_value("OUT_NORMAL"), "output files generated in the run [OUT_NORMAL (default, only final files), OUT_EVOLUTION (every 10 loops and last), OUT_BEGIN (first 3 loops and final), OUT_VERBOSE (first 3, every 10 loops and last)]")
+        ("loop-output", bpo::value<std::string>()->default_value("LOOP_END"), "output files generated in the loop [LOOP_END (default, only at the end of the loop), LOOP_VERBOSE (every step of the loop)]")
+        ;
+    return command_line_options_o;
 
+}
 
+parameters_commandline_simulation_o* parameters_commandline_simulation_m(int argc, char *argv[])
+{
+
+    command_line_options_o = options_commandline_simulation_m();
+    
     bpo::variables_map vm_cmdl_o;
     store(parse_command_line(argc, argv, command_line_options_o), vm_cmdl_o);
+
+    parameters_commandline_simulation_t *options_op =
+            new parameters_commandline_simulation_t; 
+    
+    options_op->run_o = vm_cmdl_o["run"].as<std::string>();
+    options_op->config_filename_o = vm_cmdl_o["config-file"].as<std::string>();
+    std::string run_output_o = vm_cmdl_o["run-output"].as<std::string>();
+    if(run_output_o == "OUT_NORMAL") 
+        options_op->run_output = OUT_NORMAL; 
+    if(run_output_o == "OUT_EVOLUTION") 
+        options_op->run_output = OUT_EVOLUTION; 
+    if(run_output_o == "OUT_BEGIN") 
+        options_op->run_output = OUT_BEGIN; 
+    if(run_output_o == "OUT_VERBOSE") 
+        options_op->run_output = OUT_VERBOSE; 
+    
+    std::string loop_output_o = vm_cmdl_o["loop-output"].as<std::string>();
+    if(loop_output_o == "LOOP_END") 
+        options_op->loop_output = LOOP_END;
+    if(loop_output_o == "LOOP_VERBOSE") 
+        options_op->loop_output = LOOP_VERBOSE;
+
+    return options_op;
+} 
+
+simulation_parameters_t* simulation_parameters_m(int argc, char *argv[]) 
+{
 
     bpo::options_description config_file_options_o = config_file_options_m();
 
@@ -336,10 +383,12 @@ analysis_parameters_t* analysis_parameters_m(int argc, char *argv[])
     bpo::options_description command_line_options_o("Command line options");
     command_line_options_o.add_options()
         ("help", "print help message")
-        ("config-file", bpo::value<std::string>(), "configuration file, path relative to executable");
-        ("epot-file", bpo::value<std::string>(), "epot file, path relative to executable");
-        ("pdb-file", bpo::value<std::string>(), "pdb file, path relative to executable");
-        ("bfield-file", bpo::value<std::string>(), "bfield file, path relative to executable");
+        ("config-file", bpo::value<std::string>(), "configuration file, path relative to executable")
+        ("epot-file", bpo::value<std::string>(), "epot file, path relative to executable")
+        ("pdb-file", bpo::value<std::string>(), "pdb file, path relative to executable")
+        ("bfield-file", bpo::value<std::string>(), "bfield file, path relative to executable")
+
+    ;
 
 
     bpo::variables_map vm_cmdl_o;
