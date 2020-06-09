@@ -253,7 +253,7 @@ ibsimu_client::parameters_commandline_t* ic_config::clean_runpath_m(std::string 
 
     if(cmdlp_op->run_o[0] != '/') 
         cmdlp_op->run_o = to_string(current_directory) + "/" + cmdlp_op->run_o ;
-    std::cout<<cmdlp_op->run_o.find_last_of('/')<<cmdlp_op->run_o.length()<<std::endl;
+
     
     if ( cmdlp_op->run_o.find_last_of('/') != cmdlp_op->run_o.length() -1)
         cmdlp_op->run_o.append("/");

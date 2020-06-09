@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <functional>
 
 #include <ibsimu.hpp>
 #include <error.hpp>
@@ -12,7 +13,18 @@
 #include <gtkplotter.hpp>
 #include <trajectorydiagnostics.hpp>
 
+#include "datatype.h"
 #include "config.h"
+#include "config-setup.h"
+
+
+
+namespace ic = ibsimu_client;
+namespace ic_config = ibsimu_client::config;
+namespace ic_setup = ibsimu_client::setup;
+
+
+typedef std::function<void(int,const char*, EpotField&, ParticleDataBaseCyl&)> save_output_prototype_t;
 
 
 
@@ -56,6 +68,7 @@ frac 0.050
         r0 );
 }
 
+
 std::string epotstr(int i, const char* liv) {
      return to_string("epot-") + to_string(i) + "-" + liv + ".dat";
 }
@@ -64,15 +77,85 @@ std::string geomstr(int i, const char* liv) {
      return to_string("geom-") + to_string(i) + "-" + liv + ".dat";
 }
 
-std::string pdbstr(int i, const char* liv) {
-     return to_string("pdb-") + to_string(i) + "-" + liv + ".dat";
+std::string pdbstr(int i, const char* stage) {
+     return to_string("pdb-") + to_string(i) + "-" + stage + ".dat";
+}
+
+//loop_number == -1 -> salva a prescindere
+void save_output_base_m(
+    std::string run_directory_o, 
+    ic::run_output_t run_output, 
+    ic::loop_output_t loop_output,
+    std::string geom_prefix_o,
+    std::string epot_prefix_o,
+    std::string pdb_prefix_o,
+    Geometry* geometry_op,
+    int loop_number,
+    const char* stage,
+    EpotField& epot_o,
+    ParticleDataBaseCyl& pdb_o) 
+{
+    bool save = false;
+    std::string stage_o = stage;
+    
+    switch(run_output) {
+        case ic::OUT_EVOLUTION:
+            if(! (loop_number % 10))
+                save = true;
+            break;
+        case ic::OUT_BEGIN:
+            if(loop_number < 3)
+                save = true;
+            break;
+        case ic::OUT_VERBOSE:
+            if(loop_number < 3 
+                || ! (loop_number % 10))
+                save = true;
+            break;
+        case ic::OUT_NORMAL:
+        default:
+            break;
+    }
+
+
+    //if LOOP_ENd saves only at the beginning of the loop
+    if(loop_output==ic::LOOP_END) {
+        if (stage_o != "A.init")
+            save = false;
+    }
+    
+    if(loop_number == -1) {
+        save = true;
+    }
+
+    /*
+        geometry_o.save( geomstr(a,"init-loop") );
+        epot.save( epotstr(a,"init-loop"));
+        pdb.save( pdbstr(a,"init-loop") );
+    */
+    std::string suffix;
+    if(loop_number != -1) {
+        suffix = to_string(".") + to_string(loop_number) + "." + stage;
+    }
+    suffix += ".dat";
+
+    geometry_o.save( geom_prefix_o+suffix );
+    epot.save( epot_prefix_o + suffix);
+    pdb.save( pdb_prefix_o+suffix );
+
+
 }
 
 
-void simulation( Geometry &geometry_o, MeshVectorField &bfield_o, physics_parameters_t &phy_params_o )
+void simulation( 
+    Geometry &geometry_o, 
+    MeshVectorField &bfield_o, 
+    ic::physics_parameters_t &phy_params_o,
+    save_output_prototype_t save_output_m
+     )
 {
-    double q = 6;
-    double m = 15;
+    //double q = 6;
+    //double m = 15;
     //double B0 = 0.9;
     //double r_aperture = 4.0e-3;
     //double vz = sqrt(-2.0*q*CHARGE_E*
@@ -119,27 +202,12 @@ void simulation( Geometry &geometry_o, MeshVectorField &bfield_o, physics_parame
     pdb.set_mirror( pmirror );
 
 
-    bool printout;
     for( int a = 0; a < Nrounds; a++ ) {
-        printout = false;
-        if(a==0)
-            printout = true;
-        if(a==1)
-            printout = true;
-        if(a==2)
-            printout = true;
-        if(!a%10)
-            printout = true;
-
-        if(printout) {
-        geometry_o.save( geomstr(a,"init-loop") );
-        epot.save( epotstr(a,"init-loop"));
-        pdb.save( pdbstr(a,"init-loop") );
-        }
+        save_output_m(a,"A.init", epot, pdb);
 
         ibsimu.message(1) << "Major cycle " << a << "\n";
         ibsimu.message(1) << "-----------------------\n";
-
+/*
         if( a == 1 ) {
             double electron_charge_density_rhoe = pdb.get_rhosum();
             solver.set_pexp_plasma( 
@@ -154,30 +222,19 @@ void simulation( Geometry &geometry_o, MeshVectorField &bfield_o, physics_parame
             ibsimu.message(1) << "No iterations, breaking major cycle\n";
             break;
         }
+*/
+        save_output_m(a,"B.aftersolver", epot, pdb);
 
-        if(printout) {
-        geometry_o.save( geomstr(a,"firstsolver") );
-        epot.save( epotstr(a,"firstsolver"));
-        pdb.save( pdbstr(a,"firstsolver") );
-        }
+//        efield.recalculate();
 
-        efield.recalculate();
+        save_output_m(a,"C.afterefieldrecalculate", epot, pdb);
 
-        if(printout) {
-        geometry_o.save( geomstr(a,"efieldrecalculate") );
-        epot.save( epotstr(a,"efieldrecalculate"));
-        pdb.save( pdbstr(a,"efieldrecalculate") );
-        }
 
-        pdb.clear();
+//        pdb.clear();
 
-        if(printout) {
-        geometry_o.save( geomstr(a,"pdbclear") );
-        epot.save( epotstr(a,"pdbclear"));
-        pdb.save( pdbstr(a,"pdbclear") );
-        }
+        save_output_m(a,"D.afterpdbclear", epot, pdb);
 
-        
+/*        
         //      geom, pdb,        q,  m,  Jtotal, frac
         add_beam( geometry_o, pdb, 1, 15, Jtotal, 0.050 );
         add_beam( geometry_o, pdb, 2, 15, Jtotal, 0.100 );
@@ -186,21 +243,13 @@ void simulation( Geometry &geometry_o, MeshVectorField &bfield_o, physics_parame
         add_beam( geometry_o, pdb, 5, 15, Jtotal, 0.250 );
         add_beam( geometry_o, pdb, 6, 15, Jtotal, 0.085 );
         add_beam( geometry_o, pdb, 7, 15, Jtotal, 0.005 );
-
-        if(printout) {
-        geometry_o.save( geomstr(a,"addbeam") );
-        epot.save( epotstr(a,"addbeam"));
-        pdb.save( pdbstr(a,"addbeam") );
-        }
+*/
+        save_output_m(a,"E.afteraddbeam", epot, pdb);
 
         //add_beam( geometry_o, pdb, 6, 15, Jtotal, 1.0 );
-        pdb.iterate_trajectories( scharge, efield, bfield_o );
+//        pdb.iterate_trajectories( scharge, efield, bfield_o );
 
-        if(printout) {
-        geometry_o.save( geomstr(a,"iteratetrajectories") );
-        epot.save( epotstr(a,"iteratetrajectories"));
-        pdb.save( pdbstr(a,"iteratetrajectories") );
-        }
+        save_output_m(a,"F.aftertrajectories", epot, pdb);
         
         TrajectoryDiagnosticData tdata;
         std::vector<trajectory_diagnostic_e> diag;
@@ -230,10 +279,9 @@ void simulation( Geometry &geometry_o, MeshVectorField &bfield_o, physics_parame
         }
         
     }
-
-    geometry_o.save( "geom.dat" );
-    epot.save( "epot.dat" );
-    pdb.save( "pdb.dat" );
+    
+    save_output_m(-1,"", epot, pdb);
+return;
     MeshScalarField tdens( geometry_o );
     pdb.build_trajectory_density_field( tdens );
     
@@ -255,23 +303,22 @@ void simulation( Geometry &geometry_o, MeshVectorField &bfield_o, physics_parame
 }
 
 
-
 int main(int argc, char *argv[]) 
 {
 
     remove( "emit.txt" );
 
-    ibsimu_client::parameters_commandline_t* cmdlp_op = 
-            ibsimu_client::parameters_commandline_m(argc, argv);
+    ic::parameters_commandline_t* cmdlp_op = 
+            ic_config::parameters_commandline_m(argc, argv);
     
     const int buffer_len = 2500;
     char current_directory[buffer_len];
     getcwd(current_directory, buffer_len);
 
 
-    if (!ibsimu_client::clean_runpath_m(current_directory, cmdlp_op)) 
+    if (!ic_config::clean_runpath_m(current_directory, cmdlp_op)) 
     {
-        ibsimu_client::show_help();
+        ic_config::show_help();
         return 0;
     }
 
@@ -282,30 +329,78 @@ int main(int argc, char *argv[])
 
     bpo::variables_map* params_op;
     try {
-        params_op = ibsimu_client::parameters_configfile_m(cmdlp_op->config_filename_o);
-    } catch (Error e) {
-        e.print_error_message( ibsimu.message( 0 ) );
-        std::cout<<"--help for help"<<std::endl;
+        params_op = ic_config::parameters_configfile_m(cmdlp_op->config_filename_o);
+    } catch (boost::exception& e) {
+        std::cout<<"Error in config file"<<std::endl;
+        std::cout<<diagnostic_information(e)<<std::endl;
+        std::cout<<"./simulation --help for help"<<std::endl;
         return 1;
     }
     
 
     try {
-    	ibsimu.set_message_threshold( message_threshold_m(*params_op, MSG_VERBOSE), 1 );
-	    ibsimu.set_thread_count( num_cores_m(*params_op, 2) );
+    	ibsimu.set_message_threshold( ic_config::message_threshold_m(*params_op, MSG_VERBOSE), 1 );
+	    ibsimu.set_thread_count( ic_config::num_cores_m(*params_op, 2) );
 
-        Geometry* geometry_op = geometry_m(*params_op); 
+        Geometry* geometry_op = ic_setup::geometry_m(*params_op); 
 
-        wall_bound_m(*geometry_op, *params_op);
-        dxfsolids_m(*geometry_op, *params_op);
+        ic_setup::wall_bound_m(*geometry_op, *params_op);
+        ic_setup::dxfsolids_m(*geometry_op, *params_op);
 
-        MeshVectorField* bfield_op = bfield_m(*geometry_op, *params_op);
+        MeshVectorField* bfield_op = ic_setup::bfield_m(*geometry_op, *params_op);
 
         geometry_op->build_mesh();
 
-        physics_parameters_t &phy_pars = *physics_parameters_m(*params_op);
+        ic::physics_parameters_t &phy_pars = *ic_setup::physics_parameters_m(*params_op);
 
-        simulation(*geometry_op, *bfield_op, phy_pars);
+      
+        std::string& lbd_run_o = cmdlp_op->run_o;
+        ibsimu_client::run_output_t lbd_run_output = cmdlp_op->run_output;
+        ibsimu_client::loop_output_t lbd_loop_output = cmdlp_op->loop_output;
+        const std::string& prefix_geom_o = (*params_op)["ibsimu-file-prefix-geometry"].as<std::string>();
+        const std::string& prefix_epot_o = (*params_op)["ibsimu-file-prefix-epot"]    .as<std::string>();
+        const std::string& prefix_pdb_o  = (*params_op)["ibsimu-file-prefix-pdb"]     .as<std::string>();
+
+        save_output_prototype_t save_output_lambda_m
+             = [
+                    lbd_run_o,
+                    lbd_run_output,
+                    lbd_loop_output,
+                    prefix_geom_o,
+                    prefix_epot_o,
+                    prefix_pdb_o,
+                    geometry_op
+            ](
+                    int loop_number,
+                    const char* stage,
+                    EpotField& epot_o,
+                    ParticleDataBaseCyl& pdb_o
+            ) {
+                save_output_base_m(
+                    lbd_run_o,
+                    lbd_run_output,
+                    lbd_loop_output,
+                    prefix_geom_o,
+                    prefix_epot_o,
+                    prefix_pdb_o,
+                    geometry_op,
+                    loop_number,
+                    stage,
+                    epot_o,
+                    pdb_o
+                );
+            };
+
+            
+
+
+
+        simulation(
+            *geometry_op, 
+            *bfield_op, 
+            phy_pars,
+            save_output_lambda_m
+            );
     	
     } catch( Error e ) {
 	    e.print_error_message( ibsimu.message(0) );

@@ -17,8 +17,12 @@
 
 #include "config.h"
 
+int main()
+{
+    
+}
 
-
+/*
 
 
 void analysis(Geometry &geometry_o,EpotField &epot_o,ParticleDataBase &pdb_o, MeshVectorField &bfield_o, physics_parameters_t &phy_pars)
@@ -122,3 +126,4 @@ int main(int argc, char *argv[])
     
 
 }
+*/

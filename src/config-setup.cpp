@@ -1,15 +1,8 @@
-//Compile with 
-//g++ -o config config.cpp -lboost_program_options
 
 
-/*
+#include "config-setup.h"
 
-g++ -g `pkg-config --cflags ibsimu-1.0.6dev` -c -o config.o config.cpp -lboost_program_options
-*/
-
-#include "config.h"
-
-namespace ic_setup = ibsimu_client::setup
+namespace ic_setup = ibsimu_client::setup;
 
 bound_type_t ic_setup::bound_type_m(const bound_type_string_t &s) 
 {
@@ -195,27 +188,9 @@ MeshVectorField* ic_setup::bfield_m(Geometry &geometry_o, bpo::variables_map &vm
 }
 
 
-int ic_setup::num_cores_m(bpo::variables_map &vm_o, int default_v)
-{
-    if(vm_o.count("ibsimu-cores"))
-        return vm_o["ibsimu-cores"].as<int>();    
-    else
-        return default_v;
-}
-
-message_type_e message_threshold_m(bpo::variables_map &vm_o, message_type_e default_v)
-{
-    if(vm_o.count("ibsimu-message-threshold")) {
-        const std::string &s = vm_o["ibsimu-message-threshold"].as<std::string>();
-        if(s == "MSG_VERBOSE") 
-            return MSG_VERBOSE;
-    }
-    return default_v;
-
-}
 
 
-physics_parameters_t* physics_parameters_m(bpo::variables_map &vm_o)
+ibsimu_client::physics_parameters_t* ic_setup::physics_parameters_m(bpo::variables_map &vm_o)
 {
     double Te = vm_o["electron-temperature-Te"].as<double>();
     double Up = vm_o["plasma-potential-Up"].as<double>();
@@ -223,7 +198,7 @@ physics_parameters_t* physics_parameters_m(bpo::variables_map &vm_o)
     double plasma_init_x  = vm_o["plasma-init-x"].as<double>();
     double plasma_init_y  = vm_o["plasma-init-y"].as<double>();
     double plasma_init_z  = vm_o["plasma-init-z"].as<double>();
-    physics_parameters_t* phypars = new physics_parameters_t;
+    ibsimu_client::physics_parameters_t* phypars = new ibsimu_client::physics_parameters_t;
     phypars->electron_temperature_Te = Te;
     phypars->plasma_potential_Up = Up;
     phypars->ground_V = gndV;
@@ -233,132 +208,3 @@ physics_parameters_t* physics_parameters_m(bpo::variables_map &vm_o)
     return phypars;
 }
 
-
-bpo::options_description options_commandline_simulation_m()
-{
-    bpo::options_description command_line_options_o("Command line options");
-    command_line_options_o.add_options()
-        ("help", "print help message")
-        ("run", bpo::value<std::string>()->default_value(""), "directory containing the config.ini of the file. Output files will be written in that directory ")
-        ("config-file", bpo::value<std::string>()->default_value(""), "configuration file, path relative to executable")
-        ("run-output", bpo::value<std::string>()->default_value("OUT_NORMAL"), "output files generated in the run [OUT_NORMAL (default, only final files), OUT_EVOLUTION (every 10 loops and last), OUT_BEGIN (first 3 loops and final), OUT_VERBOSE (first 3, every 10 loops and last)]")
-        ("loop-output", bpo::value<std::string>()->default_value("LOOP_END"), "output files generated in the loop [LOOP_END (default, only at the end of the loop), LOOP_VERBOSE (every step of the loop)]")
-        ;
-    return command_line_options_o;
-
-}
-
-parameters_commandline_simulation_o* parameters_commandline_simulation_m(int argc, char *argv[])
-{
-
-    command_line_options_o = options_commandline_simulation_m();
-    
-    bpo::variables_map vm_cmdl_o;
-    store(parse_command_line(argc, argv, command_line_options_o), vm_cmdl_o);
-
-    parameters_commandline_simulation_t *options_op =
-            new parameters_commandline_simulation_t; 
-    
-    options_op->run_o = vm_cmdl_o["run"].as<std::string>();
-    options_op->config_filename_o = vm_cmdl_o["config-file"].as<std::string>();
-    std::string run_output_o = vm_cmdl_o["run-output"].as<std::string>();
-    if(run_output_o == "OUT_NORMAL") 
-        options_op->run_output = OUT_NORMAL; 
-    if(run_output_o == "OUT_EVOLUTION") 
-        options_op->run_output = OUT_EVOLUTION; 
-    if(run_output_o == "OUT_BEGIN") 
-        options_op->run_output = OUT_BEGIN; 
-    if(run_output_o == "OUT_VERBOSE") 
-        options_op->run_output = OUT_VERBOSE; 
-    
-    std::string loop_output_o = vm_cmdl_o["loop-output"].as<std::string>();
-    if(loop_output_o == "LOOP_END") 
-        options_op->loop_output = LOOP_END;
-    if(loop_output_o == "LOOP_VERBOSE") 
-        options_op->loop_output = LOOP_VERBOSE;
-
-    return options_op;
-} 
-
-simulation_parameters_t* simulation_parameters_m(int argc, char *argv[]) 
-{
-
-    bpo::options_description config_file_options_o = config_file_options_m();
-
-    if (vm_cmdl_o.count("config-file")) {
-        run_parameters_t* vm_op = new run_parameters_t;
-
-        const char* config_filename = vm_cmdl_o["config-file"].as<std::string>().c_str();
-        store(parse_config_file(config_filename, config_file_options_o, true), *vm_op);
-        bpo::notify(*vm_op);
-        return vm_op;
-    }
-
-    std::cout << command_line_options_o <<std::endl;
-    std::cout << config_file_options_o;
-    return nullptr;
-
-    
-
-}
-
-
-
-
-analysis_parameters_t* analysis_parameters_m(int argc, char *argv[]) 
-{
-
-    bpo::options_description command_line_options_o("Command line options");
-    command_line_options_o.add_options()
-        ("help", "print help message")
-        ("config-file", bpo::value<std::string>(), "configuration file, path relative to executable")
-        ("epot-file", bpo::value<std::string>(), "epot file, path relative to executable")
-        ("pdb-file", bpo::value<std::string>(), "pdb file, path relative to executable")
-        ("bfield-file", bpo::value<std::string>(), "bfield file, path relative to executable")
-
-    ;
-
-
-    bpo::variables_map vm_cmdl_o;
-    store(parse_command_line(argc, argv, command_line_options_o), vm_cmdl_o);
-
-    bpo::options_description config_file_options_o = config_file_options_m();
-
-    bool all_files = true;
-    if (!vm_cmdl_o.count("config-file")) 
-        all_files = false;
-    if (!vm_cmdl_o.count("epot-file")) 
-        all_files = false;
-    if (!vm_cmdl_o.count("pdb-file")) 
-        all_files = false;
-
-    if (!all_files) {
-        std::cout<<"Usage:"<<std::endl<<" ./analysis --config-file config.ini --epot-file epot.dat --pdb-file pdb.dat"<<std::endl;
-        std::cout << command_line_options_o <<std::endl;
-        std::cout << config_file_options_o;
-        return nullptr;
-    }
-    
-    analysis_parameters_t *params = new analysis_parameters_t;
-
-    bpo::variables_map vm_o;
-    std::string epot_filename_o;
-    std::string pdb_filename_o;
-
-
-    run_parameters_t* vm_op = new run_parameters_t;
-    const char* config_filename = vm_cmdl_o["config-file"].as<std::string>().c_str();
-    store(parse_config_file(config_filename, config_file_options_o, true), *vm_op);
-    bpo::notify(*vm_op);
-    params->vm_op = vm_op;
-
-    params->epot_filename_o = vm_cmdl_o["epot-file"].as<std::string>();
-    params->pdb_filename_o = vm_cmdl_o["pdb-file"].as<std::string>();
-   
-    
-    return params;
-
-
-    
-
-}
