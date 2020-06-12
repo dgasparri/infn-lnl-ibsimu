@@ -317,9 +317,9 @@ int main(int argc, char *argv[])
         Geometry* geometry_op = ic_setup::geometry_m(*params_op); 
 
         ic_setup::wall_bound_m(*geometry_op, *params_op);
-        ic_setup::dxfsolids_m(*geometry_op, *params_op);
+        ic_setup::dxfsolids_m(*geometry_op, *params_op, cmdlp_op->run_o);
 
-        MeshVectorField* bfield_op = ic_setup::bfield_m(*geometry_op, *params_op);
+        MeshVectorField* bfield_op = ic_setup::bfield_m(*geometry_op, *params_op, cmdlp_op->run_o);
 
         geometry_op->build_mesh();
 
@@ -363,9 +363,16 @@ int main(int argc, char *argv[])
                 );
             };
 
-            
+
+        const std::string& stats_filename_o = (*params_op)["ibsimu-file-emittance-statistics"].as<std::string>();
+        std::string fullpath_stats_filename_o;
+        if(stats_filename_o[0]=='/')
+            fullpath_stats_filename_o = stats_filename_o;
+        else
+            fullpath_stats_filename_o = cmdlp_op->run_o + stats_filename_o;
+
         std::ofstream emittance_csv(
-            (*params_op)["ibsimu-file-emittance-statistics"].as<std::string>(), 
+            fullpath_stats_filename_o, 
             std::ios_base::out | std::ios_base::trunc );
         
         std::vector<ic_beam::beam_t> beams = ic_setup::beams_m(*params_op);

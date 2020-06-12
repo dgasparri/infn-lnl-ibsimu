@@ -93,6 +93,8 @@ bpo::variables_map* ic_config::parameters_configfile_m(std::string config_filena
     
         ("ibsimu-cores", bpo::value<int>(), "Number of processor cores to use")
         ("ibsimu-message-threshold", bpo::value<std::string>(), "Output message threshold [MSG_VERBOSE]")
+        ("ibsimu-file-emittance-statistics", bpo::value<std::string>(), "Filename to write emittance statistics to")
+        
 
         ("ibsimu-file-prefix-geometry", bpo::value<std::string>()->default_value("geom"), "Prefix of file Geometry (.dat)")
         ("ibsimu-file-prefix-epot", bpo::value<std::string>()->default_value("epot"), "Prefix of file Epot (.dat)")
@@ -150,7 +152,7 @@ bpo::variables_map* ic_config::parameters_configfile_m(std::string config_filena
 
 
         ("beam-number-of-particles",       bpo::value<std::vector<int>>(), "Number of particles of the beam")
-        ("beam-current-density ",          bpo::value<std::vector<double>>(), "Current density A/m^2")
+        ("beam-current-density",           bpo::value<std::vector<double>>(), "Current density A/m^2")
         ("beam-particle-charge",           bpo::value<std::vector<int>>(), "Particle charge (in multiples of e)")
         ("beam-mass",                      bpo::value<std::vector<double>>(), "Particle mass (u)")
         ("beam-mean-energy",               bpo::value<std::vector<double>>(), "Beam mean energy (eV)")

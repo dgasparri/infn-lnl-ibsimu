@@ -71,7 +71,7 @@ std::vector<ic_beam::beam_t> ic_setup::beams_m(bpo::variables_map &vm_o)
 
 
     std::vector<int>    nump   = vm_o["beam-number-of-particles"      ].as<std::vector<int>>();
-    std::vector<double> curr   = vm_o["beam-current-density "         ].as<std::vector<double>>();
+    std::vector<double> curr   = vm_o["beam-current-density"          ].as<std::vector<double>>();
     std::vector<int>    charge = vm_o["beam-particle-charge"          ].as<std::vector<int>>();
     std::vector<double> mass   = vm_o["beam-mass"                     ].as<std::vector<double>>();
     std::vector<double> mean_E = vm_o["beam-mean-energy"              ].as<std::vector<double>>();
@@ -83,9 +83,7 @@ std::vector<ic_beam::beam_t> ic_setup::beams_m(bpo::variables_map &vm_o)
     std::vector<double> y2     = vm_o["beam-vector-y2"                ].as<std::vector<double>>();
 
     const int size = nump.size();
-    std::vector<ic_beam::beam_t> beams(size);
-
-
+    std::vector<ic_beam::beam_t> beams;
 
     for(int i = 0; i< size; i++) 
     {
@@ -148,14 +146,22 @@ void ic_setup::add_solid_m(Geometry &geometry_o,
 
 
 
-void ic_setup::dxfsolids_m(Geometry &geometry_o, bpo::variables_map &vm_o) 
+void ic_setup::dxfsolids_m(Geometry &geometry_o, bpo::variables_map &vm_o, std::string rundir_o) 
 {
 
     const std::string &dxf_filename_o = vm_o["dxf-filename"].as<std::string>();
+    std::string filename_o;
+
+    if(dxf_filename_o[0] == '/')
+        filename_o = dxf_filename_o;
+    else
+        filename_o = rundir_o + dxf_filename_o;
+
+
 
     MyDXFFile *dxffile_op = new MyDXFFile;
     dxffile_op->set_warning_level( 1 );
-    dxffile_op->read( dxf_filename_o);
+    dxffile_op->read( filename_o);
 
 
 
@@ -197,7 +203,7 @@ void ic_setup::dxfsolids_m(Geometry &geometry_o, bpo::variables_map &vm_o)
 
 
 
-MeshVectorField* ic_setup::bfield_m(Geometry &geometry_o, bpo::variables_map &vm_o)
+MeshVectorField* ic_setup::bfield_m(Geometry &geometry_o, bpo::variables_map &vm_o, std::string rundir_o)
 {
     const std::string &bfield_mode_string_o = vm_o["bfield-mode"].as<std::string>();
     const std::string &bfield_filename_o = vm_o["bfield-filename"].as<std::string>();
@@ -210,6 +216,13 @@ MeshVectorField* ic_setup::bfield_m(Geometry &geometry_o, bpo::variables_map &vm
     const geometry_value_t bfield_translate_y = vm_o["bfield-translate-y"].as<geometry_value_t>();
     const geometry_value_t bfield_translate_z = vm_o["bfield-translate-z"].as<geometry_value_t>();
 
+
+    std::string fullpath_filename_o;
+    if(bfield_filename_o[0]=='/')
+        fullpath_filename_o = bfield_filename_o;
+    else
+        fullpath_filename_o = rundir_o + bfield_filename_o;
+
     geom_mode_e bfield_mode = geometry_mode_m(bfield_mode_string_o);
 
     bool fsel[3] = {sel_f1, sel_f2, sel_f3};
@@ -219,7 +232,7 @@ MeshVectorField* ic_setup::bfield_m(Geometry &geometry_o, bpo::variables_map &vm
             fsel, 
             (double) bfield_xscale, 
             (double) bfield_fscale, 
-            bfield_filename_o);
+            fullpath_filename_o);
     bfield->translate( Vec3D(
                         bfield_translate_x,
                         bfield_translate_y,

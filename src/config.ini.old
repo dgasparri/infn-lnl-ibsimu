@@ -1,6 +1,7 @@
 ibsimu-cores = 4
 ibsimu-message-threshold = MSG_VERBOSE
 
+ibsimu-file-emittance-statistics = statistics.csv
 ibsimu-file-prefix-geometry = geom
 ibsimu-file-prefix-epot = epot
 ibsimu-file-prefix-pdb = pdb

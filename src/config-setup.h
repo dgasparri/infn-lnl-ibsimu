@@ -47,8 +47,8 @@ namespace ibsimu_client::setup
                     bound_type_t bound_type,
                     voltage_t  bound_V  );
 
-    void dxfsolids_m(Geometry &geometry_o, bpo::variables_map &vm_o);
-    ::MeshVectorField* bfield_m(Geometry &geometry_o, bpo::variables_map &vm_o);
+    void dxfsolids_m(Geometry &geometry_o, bpo::variables_map &vm_o, std::string rundir);
+    ::MeshVectorField* bfield_m(Geometry &geometry_o, bpo::variables_map &vm_o, std::string rundir_o);
     
     ibsimu_client::physics_parameters_t* physics_parameters_m(bpo::variables_map &vm_o);
 
