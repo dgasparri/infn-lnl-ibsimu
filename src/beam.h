@@ -24,7 +24,6 @@ namespace ibsimu_client::beam {
     };
 
 
-    typedef std::vector<beam_t> beams_t;
     typedef std::function<void(ParticleDataBaseCyl&)> add_2d_beams_mt;
 
     add_2d_beams_mt add_2d_beams_helper_m(std::vector<beam_t> beams);

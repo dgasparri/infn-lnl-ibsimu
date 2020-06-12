@@ -16,6 +16,7 @@
 #include <meshvectorfield.hpp>
 
 #include "datatype.h"
+#include "beam.h"
 
 #include <string>
 #include <vector>
@@ -51,7 +52,7 @@ namespace ibsimu_client::setup
     
     ibsimu_client::physics_parameters_t* physics_parameters_m(bpo::variables_map &vm_o);
 
-    std::vector<ibsimu_client::beam::beam_t*> beams_m(bpo::variables_map &vm_o); 
+    std::vector<ibsimu_client::beam::beam_t> beams_m(bpo::variables_map &vm_o); 
 
 
 }

@@ -120,7 +120,7 @@ void simulation(
     MeshVectorField &bfield_o, 
     ic::physics_parameters_t &phy_params_o,
     save_output_prototype_t save_output_m,
-    std::ofstream emittance_csv_stream_o,
+    std::ofstream& emittance_csv_stream_o,
     ic_beam::add_2d_beams_mt add_2b_beam_m 
      )
 {
@@ -237,7 +237,7 @@ void simulation(
 
 
         emittance_csv_stream_o << emit.alpha() << ",";
-        emittance_csv_stream_o << emit.beta()) << ",";
+        emittance_csv_stream_o << emit.beta() << ",";
         emittance_csv_stream_o << emit.epsilon() << "";
         emittance_csv_stream_o << std::endl;
         emittance_csv_stream_o.flush();
@@ -368,7 +368,7 @@ int main(int argc, char *argv[])
             (*params_op)["ibsimu-file-emittance-statistics"].as<std::string>(), 
             std::ios_base::out | std::ios_base::trunc );
         
-        ic_beam::beams_t beams = ic_setup::beams_m(*params_op);
+        std::vector<ic_beam::beam_t> beams = ic_setup::beams_m(*params_op);
         ic_beam::add_2d_beams_mt add_2b_beam_m = ic_beam::add_2d_beams_helper_m(beams);
 
 
