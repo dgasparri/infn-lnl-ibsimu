@@ -16,12 +16,14 @@
 #include "datatype.h"
 #include "config.h"
 #include "config-setup.h"
+#include "beam.h"
 
 
 
 namespace ic = ibsimu_client;
 namespace ic_config = ibsimu_client::config;
 namespace ic_setup = ibsimu_client::setup;
+namespace ic_beam = ibsimu_client::beam;
 
 
 typedef std::function<void(int,const char*, EpotField&, ParticleDataBaseCyl&)> save_output_prototype_t;
@@ -34,7 +36,7 @@ double h = 0.5e-3;
 double nperh = 500;
 double r0 = 10e-3;
 double Npart = r0/h*nperh;
-double Jtotal = 30.0;
+double Jtotal = 3000.0;
 
 double E0 = 10.0;
 double Tt = 1.0;
@@ -42,44 +44,8 @@ double Tt = 1.0;
 double sc_alpha = 0.7;
 
 
-void add_beam( Geometry &geom, ParticleDataBaseCyl &pdb, double q, double m, 
-	       double Jtotal, double frac )
-{
-
-/*
-add_beam( geometry_o, pdb, 
-double q 1
-double m 15
-Jtotal Jtotal  
-frac 0.050 
-*/
-
-    pdb.add_2d_beam_with_energy( 
-        Npart*frac, // Adds a beam consisting of N particles
-        Jtotal*frac, // beam current density is J (A/m^2)
-        q, // charge of beam particle is q (in multiples of e)
-        m, //mass is m (u)
-		E0, //mean energy of the beam E (eV)
-        0.0, //parallel temperature Tp (eV)
-        Tt, //transverse temperature Tt (eV)
-		geom.origo(0), 
-        0,
-		geom.origo(0), 
-        r0 );
-}
 
 
-std::string epotstr(int i, const char* liv) {
-     return to_string("epot-") + to_string(i) + "-" + liv + ".dat";
-}
-
-std::string geomstr(int i, const char* liv) {
-     return to_string("geom-") + to_string(i) + "-" + liv + ".dat";
-}
-
-std::string pdbstr(int i, const char* stage) {
-     return to_string("pdb-") + to_string(i) + "-" + stage + ".dat";
-}
 
 //loop_number == -1 -> salva a prescindere
 void save_output_base_m(
@@ -139,10 +105,12 @@ void save_output_base_m(
     }
     suffix += ".dat";
 
-    geometry_o.save( geom_prefix_o+suffix );
-    epot.save( epot_prefix_o + suffix);
-    pdb.save( pdb_prefix_o+suffix );
+    if(save) {
+        geometry_op->save( geom_prefix_o+suffix );
+        epot_o.save( epot_prefix_o + suffix);
+        pdb_o.save( pdb_prefix_o+suffix );
 
+    }
 
 }
 
@@ -151,18 +119,11 @@ void simulation(
     Geometry &geometry_o, 
     MeshVectorField &bfield_o, 
     ic::physics_parameters_t &phy_params_o,
-    save_output_prototype_t save_output_m
+    save_output_prototype_t save_output_m,
+    std::ofstream emittance_csv_stream_o,
+    ic_beam::add_2d_beams_mt add_2b_beam_m 
      )
 {
-    //double q = 6;
-    //double m = 15;
-    //double B0 = 0.9;
-    //double r_aperture = 4.0e-3;
-    //double vz = sqrt(-2.0*q*CHARGE_E*
-    //                phy_params_o.ground_V
-    //                /(m*MASS_U));
-    //double Erms = q*CHARGE_E*B0*r_aperture*r_aperture/(8*m*MASS_U*vz);
-    //ibsimu.message(1) << "Erms = "<< Erms << " m rad\n";
 
 
     //exit(0);
@@ -207,7 +168,7 @@ void simulation(
 
         ibsimu.message(1) << "Major cycle " << a << "\n";
         ibsimu.message(1) << "-----------------------\n";
-/*
+
         if( a == 1 ) {
             double electron_charge_density_rhoe = pdb.get_rhosum();
             solver.set_pexp_plasma( 
@@ -222,20 +183,21 @@ void simulation(
             ibsimu.message(1) << "No iterations, breaking major cycle\n";
             break;
         }
-*/
+
         save_output_m(a,"B.aftersolver", epot, pdb);
 
-//        efield.recalculate();
+        efield.recalculate();
 
         save_output_m(a,"C.afterefieldrecalculate", epot, pdb);
 
 
-//        pdb.clear();
+        pdb.clear();
 
         save_output_m(a,"D.afterpdbclear", epot, pdb);
 
-/*        
+        add_2b_beam_m(pdb);
         //      geom, pdb,        q,  m,  Jtotal, frac
+        /*
         add_beam( geometry_o, pdb, 1, 15, Jtotal, 0.050 );
         add_beam( geometry_o, pdb, 2, 15, Jtotal, 0.100 );
         add_beam( geometry_o, pdb, 3, 15, Jtotal, 0.200 );
@@ -243,11 +205,11 @@ void simulation(
         add_beam( geometry_o, pdb, 5, 15, Jtotal, 0.250 );
         add_beam( geometry_o, pdb, 6, 15, Jtotal, 0.085 );
         add_beam( geometry_o, pdb, 7, 15, Jtotal, 0.005 );
-*/
+        */
+
         save_output_m(a,"E.afteraddbeam", epot, pdb);
 
-        //add_beam( geometry_o, pdb, 6, 15, Jtotal, 1.0 );
-//        pdb.iterate_trajectories( scharge, efield, bfield_o );
+        pdb.iterate_trajectories( scharge, efield, bfield_o );
 
         save_output_m(a,"F.aftertrajectories", epot, pdb);
         
@@ -257,16 +219,28 @@ void simulation(
         diag.push_back( DIAG_RP );
         diag.push_back( DIAG_AP );
         diag.push_back( DIAG_CURR );
-        pdb.trajectories_at_plane( tdata, AXIS_X, geometry_o.max(0), diag );
-        EmittanceConv emit( 100, 100, 
-                    tdata(0).data(), tdata(1).data(), 
-                    tdata(2).data(), tdata(3).data() );
+        pdb.trajectories_at_plane( 
+                tdata, 
+                AXIS_X, 
+                geometry_o.max(0), 
+                diag );
+        
+        //Emittance statistics are from original data, not gridded data
+        EmittanceConv emit( 
+                100, // n Grid array n x m
+                100, // m
+                tdata(0).data(), //DIAG_R TrajectoryDiagnosticColumn
+                tdata(1).data(), //DIAG_RP
+                tdata(2).data(), //DIAG_AP
+                tdata(3).data()  //DIAG_CURR I
+                );
 
-        std::ofstream dataout( "emit.txt", std::ios_base::app );
-        dataout << emit.alpha() << " "
-            << emit.beta() << " "
-            << emit.epsilon() << "\n";
-        dataout.close();
+
+        emittance_csv_stream_o << emit.alpha() << ",";
+        emittance_csv_stream_o << emit.beta()) << ",";
+        emittance_csv_stream_o << emit.epsilon() << "";
+        emittance_csv_stream_o << std::endl;
+        emittance_csv_stream_o.flush();
 
         if( a == 0 ) {
             scharge_ave = scharge;
@@ -281,7 +255,7 @@ void simulation(
     }
     
     save_output_m(-1,"", epot, pdb);
-return;
+
     MeshScalarField tdens( geometry_o );
     pdb.build_trajectory_density_field( tdens );
     
@@ -305,8 +279,6 @@ return;
 
 int main(int argc, char *argv[]) 
 {
-
-    remove( "emit.txt" );
 
     ic::parameters_commandline_t* cmdlp_op = 
             ic_config::parameters_commandline_m(argc, argv);
@@ -392,16 +364,25 @@ int main(int argc, char *argv[])
             };
 
             
-
+        std::ofstream emittance_csv(
+            (*params_op)["ibsimu-file-emittance-statistics"].as<std::string>(), 
+            std::ios_base::out | std::ios_base::trunc );
+        
+        ic_beam::beams_t beams = ic_setup::beams_m(*params_op);
+        ic_beam::add_2d_beams_mt add_2b_beam_m = ic_beam::add_2d_beams_helper_m(beams);
 
 
         simulation(
             *geometry_op, 
             *bfield_op, 
             phy_pars,
-            save_output_lambda_m
+            save_output_lambda_m,
+            emittance_csv,
+            add_2b_beam_m
             );
     	
+        emittance_csv.close();
+
     } catch( Error e ) {
 	    e.print_error_message( ibsimu.message(0) );
     }

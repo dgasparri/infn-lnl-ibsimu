@@ -65,6 +65,44 @@ Geometry* ic_setup::geometry_m(bpo::variables_map &vm_o)
     return geometry_op;
 }
 
+namespace ic_beam = ibsimu_client::beam;
+std::vector<ic_beam::beam_t*> ic_setup::beams_m(bpo::variables_map &vm_o) 
+{
+
+    const int size = vm_o["origin-x"].as<std::vector<int>>().size();
+    std::vector<ic_beam::beam_t*> beams(size);
+
+    std::vector<int>    nump   = vm_o["beam-number-of-particles"      ].as<std::vector<int>>();
+    std::vector<double> curr   = vm_o["beam-current-density "         ].as<std::vector<double>>();
+    std::vector<int>    charge = vm_o["beam-particle-charge"          ].as<std::vector<int>>();
+    std::vector<double> mass   = vm_o["beam-mass"                     ].as<std::vector<double>>();
+    std::vector<double> mean_E = vm_o["beam-mean-energy"              ].as<std::vector<double>>();
+    std::vector<double> Tp     = vm_o["beam-parallel-temperature-Tp"  ].as<std::vector<double>>();
+    std::vector<double> TT     = vm_o["beam-transverse-temperature-Tt"].as<std::vector<double>>();
+    std::vector<double> x1     = vm_o["beam-vector-x1"                ].as<std::vector<double>>();
+    std::vector<double> y1     = vm_o["beam-vector-y1"                ].as<std::vector<double>>();
+    std::vector<double> x2     = vm_o["beam-vector-x2"                ].as<std::vector<double>>();
+    std::vector<double> y2     = vm_o["beam-vector-y2"                ].as<std::vector<double>>();
+
+
+    for(int i = 0; i< size; i++) {
+        ic_beam::beam_t* b = new ic_beam::beam_t;
+        b->n_particles = nump[i];
+        b->current_density_Am2 = curr[i];
+        b->particle_charge = charge[i];
+        b->mass = mass[i];
+        b->mean_energy = mean_E[i];
+        b->par_temp_Tp = Tp[i];
+        b->trans_temp_Tt = TT[i];
+        b->x1 = x1[i];
+        b->y1 = y1[i];
+        b->x2 = x2[i];
+        b->y2 = y2[i];
+        beams.append(b);
+    }
+    return beams;       
+}
+
 
 void ic_setup::wall_bound_m(Geometry &geometry_o, bpo::variables_map &vm_o)
 {

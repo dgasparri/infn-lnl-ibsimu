@@ -149,6 +149,18 @@ bpo::variables_map* ic_config::parameters_configfile_m(std::string config_filena
         ("plasma-init-z", bpo::value<double>(), "Plasma starting point Z")
 
 
+        ("beam-number-of-particles",       bpo::value<std::vector<int>>(), "Number of particles of the beam")
+        ("beam-current-density ",          bpo::value<std::vector<double>>(), "Current density A/m^2")
+        ("beam-particle-charge",           bpo::value<std::vector<int>>(), "Particle charge (in multiples of e)")
+        ("beam-mass",                      bpo::value<std::vector<double>>(), "Particle mass (u)")
+        ("beam-mean-energy",               bpo::value<std::vector<double>>(), "Beam mean energy (eV)")
+        ("beam-parallel-temperature-Tp",   bpo::value<std::vector<double>>(), "Beam parallel temperature Tp (eV)")
+        ("beam-transverse-temperature-Tt", bpo::value<std::vector<double>>(), "Beam transverse temperature Tt (eV)")
+        ("beam-vector-x1",                 bpo::value<std::vector<double>>(), "Beam vector x1")
+        ("beam-vector-y1",                 bpo::value<std::vector<double>>(), "Beam vector y1")
+        ("beam-vector-x2",                 bpo::value<std::vector<double>>(), "Beam vector x2")
+        ("beam-vector-y2",                 bpo::value<std::vector<double>>(), "Beam vector y1")
+
     ;
 
     if(config_filename_o.empty()) {

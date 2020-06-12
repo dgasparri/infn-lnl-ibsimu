@@ -4,15 +4,16 @@ CXXFLAGS = -lboost_program_options -Wall -g `pkg-config --cflags ibsimu-1.0.6dev
 
 
 all: analysis.o config.o config-setup.o simulation.o
-	$(CC) -o simulation simulation.o config.o config-setup.o $(LDFLAGS) -lboost_program_options
+	$(CC) -o simulation simulation.o config.o config-setup.o beam.o $(LDFLAGS) -lboost_program_options
 	$(CC) -o analysis analysis.o config.o config-setup.o $(LDFLAGS) -lboost_program_options
 
 config.o: config.cpp config.h  datatype.h
 #	$(CC) -c config.cpp $(LDFLAGS) -lboost_program_options
 
-config-setup.o: config-setup.cpp config-setup.h datatype.h
+config-setup.o: config-setup.cpp config-setup.h beam.h datatype.h
 #	$(CC) -c config.cpp $(LDFLAGS) -lboost_program_options
 
+beam.o: beam.cpp beam.h
 
 simulation.o: simulation.cpp datatype.h
 #	$(CC) -c simulation.cpp $(LDFLAGS) -lboost_program_options
