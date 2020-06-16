@@ -106,9 +106,9 @@ void save_output_base_m(
     suffix += ".dat";
 
     if(save) {
-        geometry_op->save( geom_prefix_o+suffix );
-        epot_o.save( epot_prefix_o + suffix);
-        pdb_o.save( pdb_prefix_o+suffix );
+        geometry_op->save( run_directory_o + geom_prefix_o+suffix );
+        epot_o.save( run_directory_o + epot_prefix_o + suffix);
+        pdb_o.save( run_directory_o + pdb_prefix_o+suffix );
 
     }
 
