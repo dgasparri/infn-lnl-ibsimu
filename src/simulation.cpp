@@ -196,16 +196,6 @@ void simulation(
         save_output_m(a,"D.afterpdbclear", epot, pdb);
 
         add_2b_beam_m(pdb);
-        //      geom, pdb,        q,  m,  Jtotal, frac
-        /*
-        add_beam( geometry_o, pdb, 1, 15, Jtotal, 0.050 );
-        add_beam( geometry_o, pdb, 2, 15, Jtotal, 0.100 );
-        add_beam( geometry_o, pdb, 3, 15, Jtotal, 0.200 );
-        add_beam( geometry_o, pdb, 4, 15, Jtotal, 0.310 );
-        add_beam( geometry_o, pdb, 5, 15, Jtotal, 0.250 );
-        add_beam( geometry_o, pdb, 6, 15, Jtotal, 0.085 );
-        add_beam( geometry_o, pdb, 7, 15, Jtotal, 0.005 );
-        */
 
         save_output_m(a,"E.afteraddbeam", epot, pdb);
 
@@ -281,7 +271,7 @@ int main(int argc, char *argv[])
 {
 
     ic::parameters_commandline_t* cmdlp_op = 
-            ic_config::parameters_commandline_m(argc, argv);
+            ic_config::parameters_commandline_m(argc, argv, true);
     
     const int buffer_len = 2500;
     char current_directory[buffer_len];
@@ -290,7 +280,7 @@ int main(int argc, char *argv[])
 
     if (!ic_config::clean_runpath_m(current_directory, cmdlp_op)) 
     {
-        ic_config::show_help();
+        ic_config::show_help(true);
         return 0;
     }
 

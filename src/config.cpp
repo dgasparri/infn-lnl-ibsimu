@@ -38,16 +38,26 @@ message_type_e ic_config::message_threshold_m(bpo::variables_map &vm_o, message_
 
 //argc == -1 -> prints help
 //parameters_commandline_m
-ibsimu_client::parameters_commandline_t* ic_config::parameters_commandline_m(int argc, char *argv[])
+ibsimu_client::parameters_commandline_t* ic_config::parameters_commandline_m(int argc, char *argv[], bool is_simulation)
 {
     bpo::options_description command_line_options_o("Command line options");
     command_line_options_o.add_options()
         ("help", "print help message")
         ("run", bpo::value<std::string>()->default_value(""), "directory containing the config.ini of the file. Output files will be written in that directory ")
         ("config-file", bpo::value<std::string>()->default_value(""), "configuration file, path relative to executable")
-        ("run-output", bpo::value<std::string>()->default_value("OUT_NORMAL"), "output files generated in the run [OUT_NORMAL (default, only final files), OUT_EVOLUTION (every 10 loops and last), OUT_BEGIN (first 3 loops and final), OUT_VERBOSE (first 3, every 10 loops and last)]")
-        ("loop-output", bpo::value<std::string>()->default_value("LOOP_END"), "output files generated in the loop [LOOP_END (default, only at the end of the loop), LOOP_VERBOSE (every step of the loop)]")
         ;
+
+    if(is_simulation) 
+        command_line_options_o.add_options()
+            ("run-output", bpo::value<std::string>()->default_value("OUT_NORMAL"), "output files generated in the run [OUT_NORMAL (default, only final files), OUT_EVOLUTION (every 10 loops and last), OUT_BEGIN (first 3 loops and final), OUT_VERBOSE (first 3, every 10 loops and last)]")
+            ("loop-output", bpo::value<std::string>()->default_value("LOOP_END"), "output files generated in the loop [LOOP_END (default, only at the end of the loop), LOOP_VERBOSE (every step of the loop)]")
+        ;
+    else
+        command_line_options_o.add_options()
+            ("epot-file", bpo::value<std::string>()->default_value(""), "epot file, path relative to executable [REQUIRED]")
+            ("pdb-file", bpo::value<std::string>()->default_value(""), "pdb file, path relative to executable [REQUIRED]")
+        ;
+
     
     //Prints help
     if(argc == -1) {
@@ -63,21 +73,30 @@ ibsimu_client::parameters_commandline_t* ic_config::parameters_commandline_m(int
     
     options_op->run_o = vm_cmdl_o["run"].as<std::string>();
     options_op->config_filename_o = vm_cmdl_o["config-file"].as<std::string>();
-    std::string run_output_o = vm_cmdl_o["run-output"].as<std::string>();
-    if(run_output_o == "OUT_NORMAL") 
-        options_op->run_output = OUT_NORMAL; 
-    if(run_output_o == "OUT_EVOLUTION") 
-        options_op->run_output = OUT_EVOLUTION; 
-    if(run_output_o == "OUT_BEGIN") 
-        options_op->run_output = OUT_BEGIN; 
-    if(run_output_o == "OUT_VERBOSE") 
-        options_op->run_output = OUT_VERBOSE; 
-    
-    std::string loop_output_o = vm_cmdl_o["loop-output"].as<std::string>();
-    if(loop_output_o == "LOOP_END") 
-        options_op->loop_output = LOOP_END;
-    if(loop_output_o == "LOOP_VERBOSE") 
-        options_op->loop_output = LOOP_VERBOSE;
+
+    if(is_simulation) {
+        std::string run_output_o = vm_cmdl_o["run-output"].as<std::string>();
+        if(run_output_o == "OUT_NORMAL") 
+            options_op->run_output = OUT_NORMAL; 
+        if(run_output_o == "OUT_EVOLUTION") 
+            options_op->run_output = OUT_EVOLUTION; 
+        if(run_output_o == "OUT_BEGIN") 
+            options_op->run_output = OUT_BEGIN; 
+        if(run_output_o == "OUT_VERBOSE") 
+            options_op->run_output = OUT_VERBOSE; 
+        
+        std::string loop_output_o = vm_cmdl_o["loop-output"].as<std::string>();
+        if(loop_output_o == "LOOP_END") 
+            options_op->loop_output = LOOP_END;
+        if(loop_output_o == "LOOP_VERBOSE") 
+            options_op->loop_output = LOOP_VERBOSE;
+    }
+
+    if(!is_simulation) {
+        options_op->epot_filename_o = vm_cmdl_o["epot-file"].as<std::string>();
+        options_op->pdb_filename_o = vm_cmdl_o["pdb-file"].as<std::string>();
+
+    }
 
     return options_op;
 } 
@@ -177,7 +196,7 @@ bpo::variables_map* ic_config::parameters_configfile_m(std::string config_filena
     return vm_op;
 }
 
-
+/*
 analysis_parameters_t* analysis_parameters_m(int argc, char *argv[]) 
 {
 
@@ -235,11 +254,11 @@ analysis_parameters_t* analysis_parameters_m(int argc, char *argv[])
     
 
 }
+*/
 
-
-void ic_config::show_help()
+void ic_config::show_help(bool is_simulation)
 {
-    parameters_commandline_m(-1, nullptr);
+    parameters_commandline_m(-1, nullptr, is_simulation);
     parameters_configfile_m(to_string(""));
 }
 

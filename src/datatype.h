@@ -30,6 +30,8 @@ namespace ibsimu_client {
         std::string config_filename_o;
         run_output_t run_output;
         loop_output_t loop_output;
+        std::string epot_filename_o;
+        std::string pdb_filename_o;
     };
 
     struct physics_parameters_t {

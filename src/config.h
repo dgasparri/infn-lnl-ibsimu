@@ -47,9 +47,9 @@ namespace ibsimu_client::config {
 
    
     bpo::variables_map* parameters_configfile_m(std::string config_filename_o); 
-    ibsimu_client::parameters_commandline_t* parameters_commandline_m(int argc, char *argv[]);
+    ibsimu_client::parameters_commandline_t* parameters_commandline_m(int argc, char *argv[], bool is_simulation = true);
     ibsimu_client::parameters_commandline_t* clean_runpath_m(std::string current_directory, ibsimu_client::parameters_commandline_t* cmdlp_op);
-    void show_help();
+    void show_help(bool is_simulation = true);
 
     int num_cores_m(bpo::variables_map &vm_o, int default_v = 2);
     message_type_e message_threshold_m(bpo::variables_map &vm_o, message_type_e default_v);
