@@ -121,6 +121,9 @@ int main(int argc, char *argv[])
 
     if (cmdlp_op->epot_filename_o.empty() || cmdlp_op->pdb_filename_o.empty()) 
     {
+        std::cout<<"Error: missing epot and/or pdb file"<<std::endl;
+        std::cout<<"Usage:"<<std::endl;
+        std::cout<<" ./analysis --run simu-XX --epot-file epot.dat --pdb-file pdb.dat"<<std::endl;
         ic_config::show_help(false);
         return 0;
     }
@@ -170,7 +173,10 @@ int main(int argc, char *argv[])
 
         //Analysis - specific
 
-
+        //bfield_op->save("bfield.prova.txt");
+        std::ofstream fo("bfield-debug.txt");
+        bfield_op->debug_print(fo);
+        fo.close();
 
 
         std::ifstream is_epot(fullpath_epot_filename_o);

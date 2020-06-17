@@ -38,10 +38,11 @@ namespace ibsimu_client {
         //double electron_charge_density_rhoe;
         double electron_temperature_Te;
         double plasma_potential_Up;
-        double ground_V;
+        // double ground_V;
         double plasma_init_x;
         double plasma_init_y;
         double plasma_init_z;
+        double space_charge_alpha; //sc_alpha, 0.7, Idk
     };
 
 

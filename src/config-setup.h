@@ -21,6 +21,7 @@
 #include <string>
 #include <vector>
 #include <unistd.h>
+#include <functional>
 
 namespace bpo = boost::program_options;
  

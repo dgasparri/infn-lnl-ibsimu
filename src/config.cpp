@@ -111,6 +111,7 @@ bpo::variables_map* ic_config::parameters_configfile_m(std::string config_filena
     config_file_options_o.add_options()
     
         ("ibsimu-cores", bpo::value<int>(), "Number of processor cores to use")
+        ("number-of-rounds", bpo::value<int>()->default_value(50), "Number of rounds")
         ("ibsimu-message-threshold", bpo::value<std::string>(), "Output message threshold [MSG_VERBOSE]")
         ("ibsimu-file-emittance-statistics", bpo::value<std::string>(), "Filename to write emittance statistics to")
         
@@ -161,9 +162,10 @@ bpo::variables_map* ic_config::parameters_configfile_m(std::string config_filena
         ("bfield-translate-y", bpo::value<geometry_value_t>(), "bfield translate y")
         ("bfield-translate-z", bpo::value<geometry_value_t>(), "bfield translate z")
 
-        ("ground-voltage", bpo::value<voltage_t>(), "ground voltage V")
+        // ("ground-voltage", bpo::value<voltage_t>(), "ground voltage V")
         ("electron-temperature-Te", bpo::value<double>(), "Electron Temperature Te")
         ("plasma-potential-Up", bpo::value<double>(), "Plasma Potential Up")
+        ("space-charge-alpha", bpo::value<double>(), "Sc_alpha (0.7)")
 
         ("plasma-init-x", bpo::value<double>(), "Plasma starting point X")
         ("plasma-init-y", bpo::value<double>(), "Plasma starting point Y")

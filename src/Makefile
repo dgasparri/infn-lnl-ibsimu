@@ -1,4 +1,4 @@
-CC = g++
+CC = g++ -std=c++17
 LDFLAGS = `pkg-config --libs ibsimu-1.0.6dev`
 CXXFLAGS = -lboost_program_options -Wall -g `pkg-config --cflags ibsimu-1.0.6dev` 
 

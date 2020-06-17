@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vector>
 #include <functional>
+//#include <numeric>
+
 
 #include <ibsimu.hpp>
 #include <error.hpp>
@@ -30,7 +32,7 @@ typedef std::function<void(int,const char*, EpotField&, ParticleDataBaseCyl&)> s
 
 
 
-
+/*
 int Nrounds = 50;
 double h = 0.5e-3;
 double nperh = 500;
@@ -43,7 +45,7 @@ double Tt = 1.0;
 
 double sc_alpha = 0.7;
 
-
+*/
 
 
 
@@ -121,7 +123,8 @@ void simulation(
     ic::physics_parameters_t &phy_params_o,
     save_output_prototype_t save_output_m,
     std::ofstream& emittance_csv_stream_o,
-    ic_beam::add_2d_beams_mt add_2b_beam_m 
+    ic_beam::add_2d_beams_mt add_2b_beam_m,
+    const int n_rounds 
      )
 {
 
@@ -143,18 +146,38 @@ void simulation(
     
     //http://ibsimu.sourceforge.net/manual_1_0_6/classInitialPlasma.html
     //Initial plasma exists at coordinates less than val in axis direction
+    InitialPlasma* initial_plasma_op[3];
+    std::function<void(InitialPlasma*&,std::string, coordinate_axis_e, double, double)> plasma_init_helper_m = 
+        [&solver](InitialPlasma* &ip_op, std::string axis, coordinate_axis_e axis_e, double init, double potential) {
+            if(isnan(init)) {
+                ip_op = nullptr;
+                return;
+            } 
+            std::cout<<"Setting initial plasma before axis "<<axis<<std::endl;
+            ip_op = new InitialPlasma( axis_e, init );
+            solver.set_initial_plasma( 
+                potential, 
+                ip_op); //TODO: delete InitialPlasma istances at the end of the simulation
+        };
     
-    InitialPlasma *initial_plasma_op;
-    if(phy_params_o.plasma_init_x)
-        initial_plasma_op = new InitialPlasma( AXIS_X, phy_params_o.plasma_init_x );
-    if(phy_params_o.plasma_init_y)
+    plasma_init_helper_m(initial_plasma_op[0], "X", AXIS_X, phy_params_o.plasma_init_x, phy_params_o.plasma_potential_Up);
+    plasma_init_helper_m(initial_plasma_op[1], "Y", AXIS_Y, phy_params_o.plasma_init_y, phy_params_o.plasma_potential_Up);
+    plasma_init_helper_m(initial_plasma_op[2], "Z", AXIS_Z, phy_params_o.plasma_init_z, phy_params_o.plasma_potential_Up);
+
+/*    
+    phy_params_o.plasma_init_x
+    if(!isnan(phy_params_o.plasma_init_y)) 
+    {
+        std::cout<<"Setting initial plasma before axis Y"<<std::endl;
         initial_plasma_op = new InitialPlasma( AXIS_Y, phy_params_o.plasma_init_y );
-    if(phy_params_o.plasma_init_z)
-        initial_plasma_op = new InitialPlasma( AXIS_Z, phy_params_o.plasma_init_z );
+        solver.set_initial_plasma( 
+            phy_params_o.plasma_potential_Up, 
+            initial_plasma_op);
+
+    }
+*/
+        
     
-    solver.set_initial_plasma( 
-        phy_params_o.plasma_potential_Up, 
-        initial_plasma_op);
 
     ParticleDataBaseCyl pdb( geometry_o );
     bool pmirror[6] = {false, false,
@@ -163,7 +186,8 @@ void simulation(
     pdb.set_mirror( pmirror );
 
 
-    for( int a = 0; a < Nrounds; a++ ) {
+    for( int a = 0; a < n_rounds; a++ ) {
+        emittance_csv_stream_o << a << ",";
         save_output_m(a,"A.init", epot, pdb);
 
         ibsimu.message(1) << "Major cycle " << a << "\n";
@@ -225,20 +249,48 @@ void simulation(
                 tdata(3).data()  //DIAG_CURR I
                 );
 
-
         emittance_csv_stream_o << emit.alpha() << ",";
         emittance_csv_stream_o << emit.beta() << ",";
-        emittance_csv_stream_o << emit.epsilon() << "";
+        emittance_csv_stream_o << emit.epsilon() << ",";
+
+        const int num_traj_end = tdata(3).size();
+        const std::vector<double>& IQ_end_o = tdata(3).data();
+        double IQ_end = 0.0;
+        for(const double IQ: IQ_end_o) {
+            IQ_end+= IQ;
+        }
+        //std::reduce C++17 not yet implemented
+        //const double IQ_end = std::reduce(IQ_end_o.cbegin(), IQ_end_o.cend());
+
+        diag.clear();
+        tdata.clear();
+        diag.push_back( DIAG_CURR );
+        pdb.trajectories_at_plane( tdata, AXIS_X, 0.001, diag );
+
+        const int num_traj_begin = tdata(0).size();
+        const std::vector<double>& IQ_begin_o = tdata(0).data();
+        //const double IQ_begin = std::reduce(IQ_begin_o.cbegin(), IQ_begin_o.cend());
+        double IQ_begin = 0.0;
+        for(const double IQ: IQ_begin_o) {
+            IQ_begin+= IQ;
+        }
+
+
+        emittance_csv_stream_o << num_traj_begin << ",";
+        emittance_csv_stream_o << IQ_begin << ",";
+        emittance_csv_stream_o << num_traj_end << ",";
+        emittance_csv_stream_o << IQ_end << ",";
+
         emittance_csv_stream_o << std::endl;
         emittance_csv_stream_o.flush();
 
         if( a == 0 ) {
             scharge_ave = scharge;
         } else {
-            double sc_beta = 1.0-sc_alpha;
+            double sc_beta = 1.0-phy_params_o.space_charge_alpha;
             uint32_t nodecount = scharge.nodecount();
             for( uint32_t b = 0; b < nodecount; b++ ) {
-            scharge_ave(b) = sc_alpha*scharge(b) + sc_beta*scharge_ave(b);
+            scharge_ave(b) = phy_params_o.space_charge_alpha*scharge(b) + sc_beta*scharge_ave(b);
             }
         }
         
@@ -250,7 +302,9 @@ void simulation(
     pdb.build_trajectory_density_field( tdens );
     
     
-    delete(initial_plasma_op);
+    delete(initial_plasma_op[0]); //Safe to delete nullptr
+    delete(initial_plasma_op[1]);
+    delete(initial_plasma_op[2]);
 
     int temp_a = 1;
     GTKPlotter plotter( &temp_a, nullptr );
@@ -375,7 +429,8 @@ int main(int argc, char *argv[])
             phy_pars,
             save_output_lambda_m,
             emittance_csv,
-            add_2b_beam_m
+            add_2b_beam_m,
+            (*params_op)["number-of-rounds"].as<int>()
             );
     	
         emittance_csv.close();

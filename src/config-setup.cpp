@@ -248,17 +248,35 @@ ibsimu_client::physics_parameters_t* ic_setup::physics_parameters_m(bpo::variabl
 {
     double Te = vm_o["electron-temperature-Te"].as<double>();
     double Up = vm_o["plasma-potential-Up"].as<double>();
-    voltage_t gndV = vm_o["ground-voltage"].as<voltage_t>();
-    double plasma_init_x  = vm_o["plasma-init-x"].as<double>();
-    double plasma_init_y  = vm_o["plasma-init-y"].as<double>();
-    double plasma_init_z  = vm_o["plasma-init-z"].as<double>();
+    double sc_alpha = vm_o["space-charge-alpha"].as<double>();
+    // voltage_t gndV = vm_o["ground-voltage"].as<voltage_t>();
+
     ibsimu_client::physics_parameters_t* phypars = new ibsimu_client::physics_parameters_t;
     phypars->electron_temperature_Te = Te;
     phypars->plasma_potential_Up = Up;
-    phypars->ground_V = gndV;
+    phypars->space_charge_alpha = sc_alpha;
+    // phypars->ground_V = gndV;
+
+    std::function<double(const char*)> plasma_init_m = [&vm_o](const char* str) {
+        if(vm_o.count(str)) 
+            return vm_o[str].as<double>();
+        return std::numeric_limits<double>::quiet_NaN();
+    };
+
+    phypars->plasma_init_x  = plasma_init_m("plasma-init-x");
+    phypars->plasma_init_y  = plasma_init_m("plasma-init-y");
+    phypars->plasma_init_z  = plasma_init_m("plasma-init-z");
+
+
+/*
+    double plasma_init_x  = vm_o["plasma-init-x"].as<double>();
+    double plasma_init_y  = vm_o["plasma-init-y"].as<double>();
+    double plasma_init_z  = vm_o["plasma-init-z"].as<double>();
     phypars->plasma_init_x  = plasma_init_x ;
     phypars->plasma_init_y  = plasma_init_y ;
     phypars->plasma_init_z  = plasma_init_z ;
+    */
+
     return phypars;
 }
 
