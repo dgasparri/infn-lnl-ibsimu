@@ -1,27 +1,27 @@
-CC = g++ -std=c++17
-LDFLAGS = `pkg-config --libs ibsimu-1.0.6dev`
+CC = g++-10 -std=c++20
+LDFLAGS = `pkg-config --libs ibsimu-1.0.6dev` -lboost_program_options
 CXXFLAGS = -lboost_program_options -Wall -g `pkg-config --cflags ibsimu-1.0.6dev` 
 
 
-all: analysis.o config.o config-setup.o simulation.o
-	$(CC) -o simulation simulation.o config.o config-setup.o beam.o $(LDFLAGS) -lboost_program_options
-	$(CC) -o analysis analysis.o config.o config-setup.o $(LDFLAGS) -lboost_program_options
+all: analysis.o simulation.o config.o config-setup.o beam.o
+	$(CC) -o simulation config.o config-setup.o beam.o simulation.o $(LDFLAGS)
+	$(CC) -o analysis config.o config-setup.o analysis.o $(LDFLAGS)
+# alla fine 
 
 config.o: config.cpp config.h  datatype.h
-#	$(CC) -c config.cpp $(LDFLAGS) -lboost_program_options
+	$(CC) $(CXXFLAGS) -c -o config.o config.cpp
 
 config-setup.o: config-setup.cpp config-setup.h beam.h datatype.h
-#	$(CC) -c config.cpp $(LDFLAGS) -lboost_program_options
+	$(CC) $(CXXFLAGS) -c -o config-setup.o config-setup.cpp
 
-beam.o: beam.cpp beam.h
+beam.o: beam.cpp beam.h datatype.h
+	$(CC) $(CXXFLAGS) -c -o beam.o beam.cpp
 
 simulation.o: simulation.cpp datatype.h
-#	$(CC) -c simulation.cpp $(LDFLAGS) -lboost_program_options
-
-#analysis: config.o analysis.o
-#	$(CC) -o analysis analysis.o config.o  $(LDFLAGS) -lboost_program_options
+	$(CC) $(CXXFLAGS) -c -o simulation.o simulation.cpp
 
 analysis.o: analysis.cpp datatype.h
+	$(CC) $(CXXFLAGS) -c -o analysis.o analysis.cpp
 
 # ecr: ecr.o
 # 	$(CC) -o ecr ecr.o $(LDFLAGS)
