@@ -4,6 +4,8 @@
 #include <functional>
 //#include <numeric>
 
+#include <numeric>
+#include <chrono>
 
 #include <ibsimu.hpp>
 #include <error.hpp>
@@ -123,6 +125,7 @@ void simulation(
     ic::physics_parameters_t &phy_params_o,
     save_output_prototype_t save_output_m,
     std::ofstream& emittance_csv_stream_o,
+    std::ofstream& timelaps_o,
     ic_beam::add_2d_beams_mt add_2b_beam_m,
     const int n_rounds 
      )
@@ -185,8 +188,15 @@ void simulation(
 		       false, false};
     pdb.set_mirror( pmirror );
 
+    
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+
+    timelaps_o <<"loop, time[s]"<<std::endl;
 
     for( int a = 0; a < n_rounds; a++ ) {
+
+        start = std::chrono::system_clock::now();
+
         emittance_csv_stream_o << a << ",";
         save_output_m(a,"A.init", epot, pdb);
 
@@ -293,9 +303,15 @@ void simulation(
             scharge_ave(b) = phy_params_o.space_charge_alpha*scharge(b) + sc_beta*scharge_ave(b);
             }
         }
+
+        end = std::chrono::system_clock::now();
+        std::chrono::duration<double> diff = end-start;
+        timelaps_o << a <<","<< diff.count() <<std::endl;
+
+        timelaps_o.flush();
         
     }
-    
+    timelaps_o.close();
     save_output_m(-1,"", epot, pdb);
 
     MeshScalarField tdens( geometry_o );
@@ -418,7 +434,15 @@ int main(int argc, char *argv[])
         std::ofstream emittance_csv(
             fullpath_stats_filename_o, 
             std::ios_base::out | std::ios_base::trunc );
-        
+
+        std::string fullpath_timing_filename_o;
+        fullpath_timing_filename_o = cmdlp_op->run_o + "simulation-time.txt";
+
+        std::ofstream timing_o(
+            fullpath_timing_filename_o, 
+            std::ios_base::out | std::ios_base::trunc );
+
+
         std::vector<ic_beam::beam_t> beams = ic_setup::beams_m(*params_op);
         ic_beam::add_2d_beams_mt add_2b_beam_m = ic_beam::add_2d_beams_helper_m(beams);
 
@@ -429,6 +453,7 @@ int main(int argc, char *argv[])
             phy_pars,
             save_output_lambda_m,
             emittance_csv,
+            timing_o,
             add_2b_beam_m,
             (*params_op)["number-of-rounds"].as<int>()
             );
