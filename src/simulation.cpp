@@ -85,18 +85,6 @@ void simulation(
     plasma_init_helper_m(initial_plasma_op[1], "Y", AXIS_Y, phy_params_o.plasma_init_y, phy_params_o.plasma_potential_Up);
     plasma_init_helper_m(initial_plasma_op[2], "Z", AXIS_Z, phy_params_o.plasma_init_z, phy_params_o.plasma_potential_Up);
 
-/*    
-    phy_params_o.plasma_init_x
-    if(!isnan(phy_params_o.plasma_init_y)) 
-    {
-        std::cout<<"Setting initial plasma before axis Y"<<std::endl;
-        initial_plasma_op = new InitialPlasma( AXIS_Y, phy_params_o.plasma_init_y );
-        solver.set_initial_plasma( 
-            phy_params_o.plasma_potential_Up, 
-            initial_plasma_op);
-
-    }
-*/
         
     
 
@@ -311,37 +299,6 @@ int main(int argc, char *argv[])
         const std::string& prefix_epot_o = (*params_op)["ibsimu-file-prefix-epot"]    .as<std::string>();
         const std::string& prefix_pdb_o  = (*params_op)["ibsimu-file-prefix-pdb"]     .as<std::string>();
 
-        /* 
-        save_output_prototype_t save_output_lambda_m
-             = [
-                    lbd_run_o,
-                    lbd_run_output,
-                    lbd_loop_output,
-                    prefix_geom_o,
-                    prefix_epot_o,
-                    prefix_pdb_o,
-                    geometry_op
-            ](
-                    int loop_number,
-                    const char* stage,
-                    EpotField& epot_o,
-                    ParticleDataBaseCyl& pdb_o
-            ) {
-                ibsimu_client::output::save_output_base_m(
-                    lbd_run_o,
-                    lbd_run_output,
-                    lbd_loop_output,
-                    prefix_geom_o,
-                    prefix_epot_o,
-                    prefix_pdb_o,
-                    geometry_op,
-                    loop_number,
-                    stage,
-                    epot_o,
-                    pdb_o
-                );
-            };
-        */
 
        ic_output::output_m_t output_m = ic_output::output_factory_m(
             lbd_run_o,
