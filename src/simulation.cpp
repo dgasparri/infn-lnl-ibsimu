@@ -28,6 +28,7 @@ namespace ic = ibsimu_client;
 namespace ic_config = ibsimu_client::config;
 namespace ic_setup = ibsimu_client::setup;
 namespace ic_beam = ibsimu_client::beam;
+namespace ic_output = ibsimu_client::output;
 
 
 
@@ -40,7 +41,7 @@ void simulation(
     Geometry &geometry_o, 
     MeshVectorField &bfield_o, 
     ic::physics_parameters_t &phy_params_o,
-    save_output_prototype_t save_output_m,
+    ic_output::output_m_t save_output_m,
     std::ofstream& emittance_csv_stream_o,
     std::ofstream& timelaps_o,
     ic_beam::add_2d_beams_mt add_2b_beam_m,
@@ -310,6 +311,7 @@ int main(int argc, char *argv[])
         const std::string& prefix_epot_o = (*params_op)["ibsimu-file-prefix-epot"]    .as<std::string>();
         const std::string& prefix_pdb_o  = (*params_op)["ibsimu-file-prefix-pdb"]     .as<std::string>();
 
+        /* 
         save_output_prototype_t save_output_lambda_m
              = [
                     lbd_run_o,
@@ -339,7 +341,18 @@ int main(int argc, char *argv[])
                     pdb_o
                 );
             };
+        */
 
+       ic_output::output_m_t output_m = ic_output::output_factory_m(
+            lbd_run_o,
+            lbd_run_output,
+            lbd_loop_output,
+            prefix_geom_o,
+            prefix_epot_o,
+            prefix_pdb_o,
+            geometry_op
+
+       );
 
         const std::string& stats_filename_o = (*params_op)["ibsimu-file-emittance-statistics"].as<std::string>();
         std::string fullpath_stats_filename_o;
@@ -368,7 +381,7 @@ int main(int argc, char *argv[])
             *geometry_op, 
             *bfield_op, 
             phy_pars,
-            save_output_lambda_m,
+            output_m,
             emittance_csv,
             timing_o,
             add_2b_beam_m,

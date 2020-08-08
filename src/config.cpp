@@ -76,21 +76,8 @@ ibsimu_client::parameters_commandline_t* ic_config::parameters_commandline_m(int
     options_op->config_filename_o = vm_cmdl_o["config-file"].as<std::string>();
 
     if(is_simulation) {
-        std::string run_output_o = vm_cmdl_o["run-output"].as<std::string>();
-        if(run_output_o == "OUT_NORMAL") 
-            options_op->run_output = OUT_NORMAL; 
-        if(run_output_o == "OUT_EVOLUTION") 
-            options_op->run_output = OUT_EVOLUTION; 
-        if(run_output_o == "OUT_BEGIN") 
-            options_op->run_output = OUT_BEGIN; 
-        if(run_output_o == "OUT_VERBOSE") 
-            options_op->run_output = OUT_VERBOSE; 
-        
-        std::string loop_output_o = vm_cmdl_o["loop-output"].as<std::string>();
-        if(loop_output_o == "LOOP_END") 
-            options_op->loop_output = LOOP_END;
-        if(loop_output_o == "LOOP_VERBOSE") 
-            options_op->loop_output = LOOP_VERBOSE;
+        options_op->run_output = ibsimu_client::output::output_options_run_output_m(vm_cmdl_o);
+        options_op->loop_output = ibsimu_client::output::output_options_loop_output_m(vm_cmdl_o);
     }
 
     if(!is_simulation) {
