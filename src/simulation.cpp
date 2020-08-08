@@ -21,7 +21,7 @@
 #include "config.h"
 #include "config-setup.h"
 #include "beam.h"
-
+#include "output.h"
 
 
 namespace ic = ibsimu_client;
@@ -30,93 +30,10 @@ namespace ic_setup = ibsimu_client::setup;
 namespace ic_beam = ibsimu_client::beam;
 
 
-typedef std::function<void(int,const char*, EpotField&, ParticleDataBaseCyl&)> save_output_prototype_t;
 
 
 
-/*
-int Nrounds = 50;
-double h = 0.5e-3;
-double nperh = 500;
-double r0 = 10e-3;
-double Npart = r0/h*nperh;
-double Jtotal = 3000.0;
 
-double E0 = 10.0;
-double Tt = 1.0;
-
-double sc_alpha = 0.7;
-
-*/
-
-
-
-//loop_number == -1 -> salva a prescindere
-void save_output_base_m(
-    std::string run_directory_o, 
-    ic::run_output_t run_output, 
-    ic::loop_output_t loop_output,
-    std::string geom_prefix_o,
-    std::string epot_prefix_o,
-    std::string pdb_prefix_o,
-    Geometry* geometry_op,
-    int loop_number,
-    const char* stage,
-    EpotField& epot_o,
-    ParticleDataBaseCyl& pdb_o) 
-{
-    bool save = false;
-    std::string stage_o = stage;
-    
-    switch(run_output) {
-        case ic::OUT_EVOLUTION:
-            if(! (loop_number % 10))
-                save = true;
-            break;
-        case ic::OUT_BEGIN:
-            if(loop_number < 3)
-                save = true;
-            break;
-        case ic::OUT_VERBOSE:
-            if(loop_number < 3 
-                || ! (loop_number % 10))
-                save = true;
-            break;
-        case ic::OUT_NORMAL:
-        default:
-            break;
-    }
-
-
-    //if LOOP_ENd saves only at the beginning of the loop
-    if(loop_output==ic::LOOP_END) {
-        if (stage_o != "A.init")
-            save = false;
-    }
-    
-    if(loop_number == -1) {
-        save = true;
-    }
-
-    /*
-        geometry_o.save( geomstr(a,"init-loop") );
-        epot.save( epotstr(a,"init-loop"));
-        pdb.save( pdbstr(a,"init-loop") );
-    */
-    std::string suffix;
-    if(loop_number != -1) {
-        suffix = to_string(".") + to_string(loop_number) + "." + stage;
-    }
-    suffix += ".dat";
-
-    if(save) {
-        geometry_op->save( run_directory_o + geom_prefix_o+suffix );
-        epot_o.save( run_directory_o + epot_prefix_o + suffix);
-        pdb_o.save( run_directory_o + pdb_prefix_o+suffix );
-
-    }
-
-}
 
 
 void simulation( 
@@ -408,7 +325,7 @@ int main(int argc, char *argv[])
                     EpotField& epot_o,
                     ParticleDataBaseCyl& pdb_o
             ) {
-                save_output_base_m(
+                ibsimu_client::output::save_output_base_m(
                     lbd_run_o,
                     lbd_run_output,
                     lbd_loop_output,

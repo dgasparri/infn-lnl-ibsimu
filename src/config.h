@@ -16,6 +16,7 @@
 #include <meshvectorfield.hpp>
 
 #include "datatype.h"
+#include "output.h"
 
 #include <string>
 #include <vector>
