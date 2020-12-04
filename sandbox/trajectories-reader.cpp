@@ -49,13 +49,22 @@ void simulation(
      )
 {
 
-
-    //exit(0);
-    std::cout<<"After mesh"<<std::endl;
-
-    EpotField epot( geometry_o );
     MeshScalarField scharge( geometry_o );
-    MeshScalarField scharge_ave( geometry_o );
+    //MeshScalarField scharge_ave( geometry_o );
+    std::ifstream is_scharge_ave("scharge_ave-init.dat");
+    MeshScalarField scharge_ave(is_scharge_ave);
+
+    EpotBiCGSTABSolver solver( geometry_o );
+
+
+    std::ifstream is_epot("epot-before-recalculate-init.dat");
+    if( !is_epot.good() )
+        throw( Error( ERROR_LOCATION, (std::string)"couldn\'t open file " ) );
+    EpotField epot( is_epot, geometry_o );
+    is_epot.close();
+
+
+
 
     EpotEfield efield( epot );
     field_extrpl_e extrapl[6] = { FIELD_EXTRAPOLATE, FIELD_EXTRAPOLATE,
@@ -63,10 +72,8 @@ void simulation(
 				  FIELD_EXTRAPOLATE, FIELD_EXTRAPOLATE };
     efield.set_extrapolation( extrapl );
   
-    EpotBiCGSTABSolver solver( geometry_o );
     
-    //http://ibsimu.sourceforge.net/manual_1_0_6/classInitialPlasma.html
-    //Initial plasma exists at coordinates less than val in axis direction
+    
     InitialPlasma* initial_plasma_op[3];
     std::function<void(InitialPlasma*&,std::string, coordinate_axis_e, double, double)> plasma_init_helper_m = 
         [&solver](InitialPlasma* &ip_op, std::string axis, coordinate_axis_e axis_e, double init, double potential) {
@@ -85,140 +92,99 @@ void simulation(
     plasma_init_helper_m(initial_plasma_op[1], "Y", AXIS_Y, phy_params_o.plasma_init_y, phy_params_o.plasma_potential_Up);
     plasma_init_helper_m(initial_plasma_op[2], "Z", AXIS_Z, phy_params_o.plasma_init_z, phy_params_o.plasma_potential_Up);
 
-        
-    
-
-    ParticleDataBaseCyl pdb( geometry_o );
+    // pdb.save("pdb-init.dat");
+  
+    std::ifstream is_pdb("pdb-init.dat");
+    ParticleDataBaseCyl pdb(is_pdb, geometry_o );
+    is_pdb.close();
     bool pmirror[6] = {false, false,
 		       true, false,
 		       false, false};
     pdb.set_mirror( pmirror );
+    
+
+
+    double electron_charge_density_rhoe = 0.00910572; 
+
+    solver.set_pexp_plasma( 
+        electron_charge_density_rhoe, 
+        phy_params_o.electron_temperature_Te, 
+        phy_params_o.plasma_potential_Up );
+
+
+    /*
+    solver.solve( epot, scharge_ave );
+    if( solver.get_iter() == 0 ) {
+        ibsimu.message(1) << "No iterations, breaking major cycle\n";
+        break;
+    }
+    */
+
+    //epot.save("epot-before-recalculate-init.dat");  
+    efield.recalculate();
+    epot.save("epot-uguale a init domanda.dat");
+
+    //epot.save("epot-init.dat");
+    
+
+    //scharge_ave.save("scharge_ave-init.dat");
+
+
+    pdb.iterate_trajectories( scharge, efield, bfield_o );
 
     
-    std::chrono::time_point<std::chrono::system_clock> start, end;
-
-    timelaps_o <<"loop, time[s]"<<std::endl;
-
-    for( int a = 0; a < n_rounds; a++ ) {
-
-        start = std::chrono::system_clock::now();
-
-        emittance_csv_stream_o << a << ",";
-        save_output_m(a,"A.init", epot, pdb);
-
-        ibsimu.message(1) << "Major cycle " << a << "\n";
-        ibsimu.message(1) << "-----------------------\n";
-
-        if( a == 1 ) {
-            double electron_charge_density_rhoe = pdb.get_rhosum();
-            solver.set_pexp_plasma( 
-                electron_charge_density_rhoe, 
-                phy_params_o.electron_temperature_Te, 
-                phy_params_o.plasma_potential_Up );
-        }
-
-
-        solver.solve( epot, scharge_ave );
-        if( solver.get_iter() == 0 ) {
-            ibsimu.message(1) << "No iterations, breaking major cycle\n";
-            break;
-        }
-
-        save_output_m(a,"B.aftersolver", epot, pdb);
-
-        efield.recalculate();
-
-        save_output_m(a,"C.afterefieldrecalculate", epot, pdb);
-
-
-        pdb.clear();
-
-        save_output_m(a,"D.afterpdbclear", epot, pdb);
-
-        add_2b_beam_m(pdb);
-
-        save_output_m(a,"E.afteraddbeam", epot, pdb);
-
-        pdb.iterate_trajectories( scharge, efield, bfield_o );
-
-        save_output_m(a,"F.aftertrajectories", epot, pdb);
+    TrajectoryDiagnosticData tdata;
+    std::vector<trajectory_diagnostic_e> diag;
+    diag.push_back( DIAG_R );
+    diag.push_back( DIAG_RP );
+    diag.push_back( DIAG_AP );
+    diag.push_back( DIAG_CURR );
+    pdb.trajectories_at_plane( 
+            tdata, 
+            AXIS_X, 
+            geometry_o.max(0), 
+            diag );
         
-        TrajectoryDiagnosticData tdata;
-        std::vector<trajectory_diagnostic_e> diag;
-        diag.push_back( DIAG_R );
-        diag.push_back( DIAG_RP );
-        diag.push_back( DIAG_AP );
-        diag.push_back( DIAG_CURR );
-        pdb.trajectories_at_plane( 
-                tdata, 
-                AXIS_X, 
-                geometry_o.max(0), 
-                diag );
-        
-        //Emittance statistics are from original data, not gridded data
-        EmittanceConv emit( 
-                100, // n Grid array n x m
-                100, // m
-                tdata(0).data(), //DIAG_R TrajectoryDiagnosticColumn
-                tdata(1).data(), //DIAG_RP
-                tdata(2).data(), //DIAG_AP
-                tdata(3).data()  //DIAG_CURR I
-                );
-
-        emittance_csv_stream_o << emit.alpha() << ",";
-        emittance_csv_stream_o << emit.beta() << ",";
-        emittance_csv_stream_o << emit.epsilon() << ",";
-
-        const int num_traj_end = tdata(3).size();
-        const std::vector<double>& IQ_end_o = tdata(3).data();
-        double IQ_end = 0.0;
-        for(const double IQ: IQ_end_o) {
-            IQ_end+= IQ;
-        }
-        //std::reduce C++17 not yet implemented
-        //const double IQ_end = std::reduce(IQ_end_o.cbegin(), IQ_end_o.cend());
-
-        diag.clear();
-        tdata.clear();
-        diag.push_back( DIAG_CURR );
-        pdb.trajectories_at_plane( tdata, AXIS_X, 0.001, diag );
-
-        const int num_traj_begin = tdata(0).size();
-        const std::vector<double>& IQ_begin_o = tdata(0).data();
-        //const double IQ_begin = std::reduce(IQ_begin_o.cbegin(), IQ_begin_o.cend());
-        double IQ_begin = 0.0;
-        for(const double IQ: IQ_begin_o) {
-            IQ_begin+= IQ;
-        }
+    //Emittance statistics are from original data, not gridded data
+    EmittanceConv emit( 
+            100, // n Grid array n x m
+            100, // m
+            tdata(0).data(), //DIAG_R TrajectoryDiagnosticColumn
+            tdata(1).data(), //DIAG_RP
+            tdata(2).data(), //DIAG_AP
+            tdata(3).data()  //DIAG_CURR I
+            );
 
 
-        emittance_csv_stream_o << num_traj_begin << ",";
-        emittance_csv_stream_o << IQ_begin << ",";
-        emittance_csv_stream_o << num_traj_end << ",";
-        emittance_csv_stream_o << IQ_end << ",";
-
-        emittance_csv_stream_o << std::endl;
-        emittance_csv_stream_o.flush();
-
-        if( a == 0 ) {
-            scharge_ave = scharge;
-        } else {
-            double sc_beta = 1.0-phy_params_o.space_charge_alpha;
-            uint32_t nodecount = scharge.nodecount();
-            for( uint32_t b = 0; b < nodecount; b++ ) {
-            scharge_ave(b) = phy_params_o.space_charge_alpha*scharge(b) + sc_beta*scharge_ave(b);
-            }
-        }
-
-        end = std::chrono::system_clock::now();
-        std::chrono::duration<double> diff = end-start;
-        timelaps_o << a <<","<< diff.count() <<std::endl;
-
-        timelaps_o.flush();
-        
+    const int num_traj_end = tdata(3).size();
+    const std::vector<double>& IQ_end_o = tdata(3).data();
+    double IQ_end = 0.0;
+    for(const double IQ: IQ_end_o) {
+        IQ_end+= IQ;
     }
-    timelaps_o.close();
-    save_output_m(-1,"", epot, pdb);
+
+    diag.clear();
+    tdata.clear();
+    diag.push_back( DIAG_CURR );
+    pdb.trajectories_at_plane( tdata, AXIS_X, 0.001, diag );
+
+    const int num_traj_begin = tdata(0).size();
+    const std::vector<double>& IQ_begin_o = tdata(0).data();
+    //const double IQ_begin = std::reduce(IQ_begin_o.cbegin(), IQ_begin_o.cend());
+    double IQ_begin = 0.0;
+    for(const double IQ: IQ_begin_o) {
+        IQ_begin+= IQ;
+    }
+
+
+    double sc_beta = 1.0-phy_params_o.space_charge_alpha;
+    uint32_t nodecount = scharge.nodecount();
+    for( uint32_t b = 0; b < nodecount; b++ ) {
+        scharge_ave(b) = phy_params_o.space_charge_alpha*scharge(b) + sc_beta*scharge_ave(b);
+    }
+
+        
+    //save_output_m(-1,"", epot, pdb);
 
     MeshScalarField tdens( geometry_o );
     pdb.build_trajectory_density_field( tdens );
