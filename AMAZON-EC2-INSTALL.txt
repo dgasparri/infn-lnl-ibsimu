@@ -1,3 +1,8 @@
+Istanza: Ohio (in alto) - Ubuntu Server 20.04 LTS x86 - c5d.12xlarge
+
+Putty to access from Windows
+
+
 List of packages to install:
 
 * pkg-config
@@ -27,6 +32,8 @@ sudo apt install gcc-10 gcc-10-base gcc-10-doc g++-10 libstdc++-10-dev libstdc++
 Cloning the Git repository in the ibsimu_lib:
 
 git clone git://ibsimu.git.sourceforge.net/gitroot/ibsimu/ibsimu ibsimu_lib
+
+Correggere errore in mydxffile.cpp!!!
 
 cd ibsimu_lib
 ./reconf
@@ -72,6 +79,16 @@ default access to server: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/co
 default username: ubuntu
 
 git clone https://github.com/dgasparri/infn-lnl-ibsimu.git 
+
+mv infn-lnl-ibsimu/* lnl-runs/
+mv infn-lnl-ibsimu/.git lnl-runs/
+mv infn-lnl-ibsimu/.gitignore lnl-runs/
+rmdir  infn-lnl-ibsimu
+
+CHECK: 
+  cd lnl-runs
+  git status
+
 
 
 Bisogna fare git di ibsimu cleaned debugged
