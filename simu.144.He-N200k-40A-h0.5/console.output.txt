@@ -1,0 +1,1243 @@
+Major cycle 22
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      196    0.000165939              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 196
+  time used = 1.13852 s (1.13857 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37571236
+    steps per particle (ave) = 150.285
+  time used = 273.017 s (46.342 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249510
+  total current = 0.00153355 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Major cycle 23
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      196    6.57411e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 196
+  time used = 1.13151 s (1.13153 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37571107
+    steps per particle (ave) = 150.284
+  time used = 273.8 s (46.4797 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249509
+  total current = 0.00153354 A
+Major cycle 24
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      198    3.50252e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 198
+  time used = 1.13327 s (1.13344 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37570868
+    steps per particle (ave) = 150.283
+  time used = 273.957 s (46.5203 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Major cycle 25
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      193    2.25509e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 193
+  time used = 1.11566 s (1.11575 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37573396
+    steps per particle (ave) = 150.294
+  time used = 273.168 s (46.3794 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249510
+  total current = 0.00153355 A
+Major cycle 26
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      215    1.40351e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 215
+  time used = 1.24708 s (1.24713 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37570057
+    steps per particle (ave) = 150.28
+  time used = 272.432 s (46.2398 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Major cycle 27
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      176     1.4505e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 176
+  time used = 1.01944 s (1.01947 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37574157
+    steps per particle (ave) = 150.297
+  time used = 272.673 s (46.2835 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249509
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Major cycle 28
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      201     1.8469e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 201
+  time used = 1.16141 s (1.16146 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37569485
+    steps per particle (ave) = 150.278
+  time used = 272.875 s (46.3127 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Major cycle 29
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      210    1.55979e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 210
+  time used = 1.21696 s (1.21701 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37572599
+    steps per particle (ave) = 150.29
+  time used = 273.208 s (46.3791 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Major cycle 30
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      179    1.42903e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 179
+  time used = 1.03663 s (1.03674 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37569189
+    steps per particle (ave) = 150.277
+  time used = 272.525 s (46.2593 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249509
+  total current = 0.00153355 A
+Major cycle 31
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      189    1.10442e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 189
+  time used = 1.08888 s (1.08888 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37570410
+    steps per particle (ave) = 150.282
+  time used = 272.851 s (46.3111 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Major cycle 32
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      201    1.64367e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 201
+  time used = 1.16161 s (1.16165 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37572517
+    steps per particle (ave) = 150.29
+  time used = 273.507 s (46.427 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Major cycle 33
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      178    9.59969e-06              1    1.86265e-09    1.97627e-13
+  Newton-Raphson converged
+  total iterations = 178
+  time used = 1.02447 s (1.02452 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37570854
+    steps per particle (ave) = 150.283
+  time used = 273.084 s (46.3573 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249509
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Major cycle 34
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      192    9.10944e-06              1    7.45058e-09    7.90507e-13
+  Newton-Raphson converged
+  total iterations = 192
+  time used = 1.11413 s (1.11416 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37572406
+    steps per particle (ave) = 150.29
+  time used = 273.35 s (46.409 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249509
+  total current = 0.00153355 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Major cycle 35
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      196    1.73694e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 196
+  time used = 1.13774 s (1.13775 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37573133
+    steps per particle (ave) = 150.293
+  time used = 272.654 s (46.279 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Major cycle 36
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      189    1.58151e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 189
+  time used = 1.09235 s (1.09251 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37571856
+    steps per particle (ave) = 150.287
+  time used = 272.853 s (46.3208 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Major cycle 37
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      178    1.12667e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 178
+  time used = 1.03004 s (1.03004 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37571319
+    steps per particle (ave) = 150.285
+  time used = 273.277 s (46.3948 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Major cycle 38
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      200    1.48419e-05              1    1.86265e-09    1.97627e-13
+  Newton-Raphson converged
+  total iterations = 200
+  time used = 1.15734 s (1.15739 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37570564
+    steps per particle (ave) = 150.282
+  time used = 272.971 s (46.3356 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Major cycle 39
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      211    3.13369e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 211
+  time used = 1.2159 s (1.21596 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37571430
+    steps per particle (ave) = 150.286
+  time used = 273.151 s (46.3788 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Major cycle 40
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      206    1.89206e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 206
+  time used = 1.19489 s (1.19491 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37571656
+    steps per particle (ave) = 150.287
+  time used = 273.455 s (46.4276 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249509
+  total current = 0.00153355 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Major cycle 41
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      217    2.25916e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 217
+  time used = 1.24832 s (1.24838 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37573093
+    steps per particle (ave) = 150.292
+  time used = 272.98 s (46.348 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249509
+  total current = 0.00153354 A
+Major cycle 42
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      186    2.21588e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 186
+  time used = 1.07388 s (1.07395 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37568934
+    steps per particle (ave) = 150.276
+  time used = 273.642 s (46.4557 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249510
+  total current = 0.00153355 A
+Major cycle 43
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      191     7.7357e-06              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 191
+  time used = 1.10403 s (1.10409 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37571579
+    steps per particle (ave) = 150.286
+  time used = 272.839 s (46.3261 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249509
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249509
+  total current = 0.00153354 A
+Major cycle 44
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      203     1.6582e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 203
+  time used = 1.17062 s (1.17069 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37571735
+    steps per particle (ave) = 150.287
+  time used = 272.636 s (46.2702 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Major cycle 45
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      198    1.26604e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 198
+  time used = 1.14944 s (1.14956 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37571982
+    steps per particle (ave) = 150.288
+  time used = 273.779 s (46.493 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Major cycle 46
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      201    1.41579e-05              1    7.45058e-09    7.90507e-13
+  Newton-Raphson converged
+  total iterations = 201
+  time used = 1.16042 s (1.16044 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37571911
+    steps per particle (ave) = 150.288
+  time used = 273.24 s (46.3823 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249509
+  total current = 0.00153354 A
+Major cycle 47
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      186    1.04885e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 186
+  time used = 1.07883 s (1.07888 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37572987
+    steps per particle (ave) = 150.292
+  time used = 273.345 s (46.4102 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249509
+  total current = 0.00153354 A
+Major cycle 48
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      184    1.20688e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 184
+  time used = 1.06968 s (1.06972 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37571276
+    steps per particle (ave) = 150.285
+  time used = 273.745 s (46.4653 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249509
+  total current = 0.00153355 A
+Major cycle 49
+-----------------------
+Solving problem
+  dof = 108343
+  Using Globally convergent Newton-Raphson BiCGSTAB-ILU0 solver (imax = 10000, eps = 0.0001, newton_imax = 10, newton_eps = 0.0001)
+  Round     Iter      Step size       Step fac       Residual   Err estimate
+      0      205    2.03544e-05              1    3.72529e-09    3.95253e-13
+  Newton-Raphson converged
+  total iterations = 205
+  time used = 1.18544 s (1.18549 s realtime)
+Calculating efield
+Defining a cylindrical beam
+  Total beam current 0.00153938 A
+Calculating particle trajectories
+  Using solid collision model
+  Using non-relativistic iterator
+  250000 / 250000 Done
+  Finalizing space charge density map (PIC method)
+  Particle histories (250000 total):
+    flown = 250000
+    time limited = 0
+    step count limited = 0
+    bad definitions = 0
+    beam to boundary 1 = 0 A (0 particles)
+    beam to boundary 2 = 0.00153354 A (249508 particles)
+    beam to boundary 3 = 0 A (0 particles)
+    beam to boundary 4 = 0 A (0 particles)
+    beam to boundary 5 = 0 A (0 particles)
+    beam to boundary 6 = 0 A (0 particles)
+    beam to boundary 7 = 5.84238e-06 A (492 particles)
+    beam to boundary 8 = 0 A (0 particles)
+    beam to boundary 9 = 0 A (0 particles)
+    beam to boundary 10 = 0 A (0 particles)
+    total steps = 37572558
+    steps per particle (ave) = 150.29
+  time used = 272.395 s (46.2475 s realtime)
+Extracting diagnostic data at 0.1
+Making trajectory diagnostics at x = 0.1
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Extracting diagnostic data at 0.5
+Making trajectory diagnostics at x = 0.5
+  number of trajectories = 249508
+  total current = 0.00153354 A
+Saving Geometry to file '/home/duccio/lnl-runs/simu.144.He-N200k-40A-h0.5/geom.dat'.
+Saving MeshScalarField to file '/home/duccio/lnl-runs/simu.144.He-N200k-40A-h0.5/epot.dat'.
+Saving ParticleDataBaseCyl to file '/home/duccio/lnl-runs/simu.144.He-N200k-40A-h0.5/pdb.dat'.
+Running GTKPlotter
+  Making trajectory diagnostics at x = 0.420935
+    number of trajectories = 249509
+    total current = 0.00153354 A
+  Making trajectory diagnostics at x = 0.5
+    number of trajectories = 249508
+    total current = 0.00153354 A
+
