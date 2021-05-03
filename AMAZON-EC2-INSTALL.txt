@@ -64,6 +64,65 @@ make clean
 make
 
 
+Mounting the NVME drive
+
+Drives:
+* nvme0n1 - standard, already mounted
+* nvme1n1 - optional
+* nvme2n1 - optional
+
+
+parted -l
+sudo parted /dev/nvme1n1
+then:
+ print
+ mklabel gpt (create partition)
+ print (shows empty table)
+ mkpart primary 2048s -1s
+ print 
+
+
+The command "mkpart primary 0 -1s" also works but it returs that 
+the drive is NOT optimized for performance ("Warning: The resulting 
+partition is not properly aligned for best performance:  1s % 2048s != 0s
+Ignore/Cancel? ")
+
+Further info on partitioning: https://opensource.com/article/18/6/how-partition-disk-linux
+# parted /dev/sdx -a opt mkpart primary 0 4G
+# parted /dev/sdx -a opt mkpart primary 2048s 4G
+
+Formatting hard drive:
+  lsblk -f
+  sudo mkfs.ext4 -L ssd1 /dev/nvme1n1p1
+  lsblk -f
+
+
+Creating a mounting point:
+
+sudo mkdir -p [mountpoint]
+sudo mount -t auto /dev/nvme1n1p1 [mountpoint]
+sudo chown -R ubuntu:ubuntu [mountpoint]
+
+where mountpoint is the directory
+
+For example, if mount point is "lnl-runs", then:
+
+sudo mkdir -p lnl-runs
+sudo mount -t auto /dev/nvme1n1p1 lnl-runs
+sudo chown -R ubuntu:ubuntu lnl-runs
+
+(sudo mount -t auto /dev/sdb1 [mountpoint] if it is not a NVME drive)
+
+
+
+
+
+
+
+
+
+
+
 Amazon images:
 
 https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html
@@ -90,44 +149,9 @@ CHECK:
   git status
 
 
-
-Bisogna fare git di ibsimu cleaned debugged
-
 Usata instanza c5d.9xlarge
 
-Per montare l'hard disk ssd:
-
-Dischi:
-* nvme0n1 - disco base
-* nvme1n1 - disco SSD 1
-* nvme2n1 - disco SSD 2
 
 
-parted -l
-sudo parted /dev/nvme1n1
-dentro:
- print
- mklabel gpt (crea partizione)
- print (mostra la tabella vuota)
- mkpart primary 0 -1s
- mkpart primary 2048s -1s 
 
-Maggiori info a: https://opensource.com/article/18/6/how-partition-disk-linux
-# parted /dev/sdx -a opt mkpart primary 0 4G
-Warning: The resulting partition is not properly aligned for best performance: 1s % 2048s != 0s
-Ignore/Cancel? C                                                          
-# parted /dev/sdx -a opt mkpart primary 2048s 4G
 
-Formatting hard drive:
-  lsblk -f
-  sudo mkfs.ext4 -L ssd1 /dev/nvme1n1p1
-  lsblk -f
-
- Create a mount point by entering:
-
-sudo mkdir -p [mountpoint]
-2. After that, mount the partition by using the following command:
-
-sudo mount -t auto /dev/sdb1 [mountpoint]
-sudo mount -t auto /dev/nvme1n1p1 lnl-runs
-sudo chown -R ubuntu:ubuntu lnl-runs
