@@ -20,7 +20,7 @@ using namespace std;
 
 int Nrounds = 50;
 double h = 0.2e-3;
-double nperh = 200;
+double nperh = 4000;
 double r0 = 15e-3;
 double Npart = r0/h*nperh;
 double Jtotal = 50.0;
@@ -43,16 +43,18 @@ void simu( int *argc, char ***argv )
     double Erms = q*CHARGE_E*B0*r_aperture*r_aperture/(8*m*MASS_U*vz);
     ibsimu.message(1) << "Erms = "<< Erms << " m rad\n";*/
 
-    Vec3D origin( 4e-3, 0, 0 );
-    Vec3D sizereq( 530e-3, 60e-3, 0 );
+    Vec3D origin( 0.0, 0.0, 0.0 );
+    Vec3D sizereq( 530e-3, 60e-3, 0.0 );
     Int3D size( floor(sizereq[0]/h)+1,
 		floor(sizereq[1]/h)+1,
 		1 );
     Geometry geom( MODE_CYL, size, origin, h );
+    //std::cout<<"Geom origo: " << geom.origo(0) << std::endl;
+    //return;
 
     MyDXFFile *dxffile = new MyDXFFile;
     dxffile->set_warning_level( 1 );
-    dxffile->read( "CNAO_MOD_Luca.dxf" );
+    dxffile->read( "../simu.180.He_compiled/CNAO_MOD_Luca_basezero.dxf" );
 
 
 
@@ -82,7 +84,7 @@ void simu( int *argc, char ***argv )
     //Vestrazione
     geom.set_boundary(  7, Bound(BOUND_DIRICHLET, 24.0e3) );
     geom.set_boundary(  8, Bound(BOUND_DIRICHLET, -1.0e3) );
-    geom.set_boundary(  9, Bound(BOUND_DIRICHLET, 700) );
+    geom.set_boundary(  9, Bound(BOUND_DIRICHLET, 700.0) );
     geom.set_boundary( 10, Bound(BOUND_DIRICHLET, 0.0) );
 
     geom.build_mesh();
@@ -131,7 +133,7 @@ void simu( int *argc, char ***argv )
 	pdb.clear();
 
     pdb.add_2d_beam_with_energy( 
-        200000, //Npart
+        Npart, //Npart
         Jtotal, //Current density A/m^2
         2, // charge of beam particle in multipels of e
         16, // mass (u)
