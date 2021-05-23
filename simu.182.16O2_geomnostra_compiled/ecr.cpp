@@ -54,7 +54,7 @@ void simu( int *argc, char ***argv )
 
     MyDXFFile *dxffile = new MyDXFFile;
     dxffile->set_warning_level( 1 );
-    dxffile->read( "../simu.180.He_compiled/CNAO_MOD_Nostra_basezero.dxf" );
+    dxffile->read( "CNAO_MOD_Nostra_basezero.dxf" );
 
 
 
