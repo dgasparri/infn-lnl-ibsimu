@@ -27,7 +27,7 @@ double Jtotal = 50.0;
 double Te = 10.0;
 double E0 = 9.0;
 double Tt = 1.0;
-double Up = 24.0;
+double Up = 24020.0;
 double sc_alpha = 0.7;
 
 
@@ -57,16 +57,20 @@ void simu( int *argc, char ***argv )
 
 
 
-    DXFSolid *s1 = new DXFSolid( dxffile, "extraction_line" );
+    //extraction_line
+    DXFSolid *s1 = new DXFSolid( dxffile, "7" );
     s1->scale( 1e-3 );
     geom.set_solid( 7, s1 );
-    DXFSolid *s2 = new DXFSolid( dxffile, "puller_line" );
+    //puller_line
+    DXFSolid *s2 = new DXFSolid( dxffile, "8" );
     s2->scale( 1e-3 );
     geom.set_solid( 8, s2 );
-    DXFSolid *s3 = new DXFSolid( dxffile, "focus_line" );
+    //focus_line
+    DXFSolid *s3 = new DXFSolid( dxffile, "9" );
     s3->scale( 1e-3 );
     geom.set_solid( 9, s3 );
-    DXFSolid *s4 = new DXFSolid( dxffile, "ground_line" );
+    //ground_line
+    DXFSolid *s4 = new DXFSolid( dxffile, "10" );
     s4->scale( 1e-3 );
     geom.set_solid( 10, s4 );
 
@@ -79,7 +83,7 @@ void simu( int *argc, char ***argv )
     geom.set_boundary(  7, Bound(BOUND_DIRICHLET, 24.0e3) );
     geom.set_boundary(  8, Bound(BOUND_DIRICHLET, -1.0e3) );
     geom.set_boundary(  9, Bound(BOUND_DIRICHLET, 700) );
-    geom.set_boundary( 10, Bound(BOUND_DIRICHLET, 0) );
+    geom.set_boundary( 10, Bound(BOUND_DIRICHLET, 0.0) );
 
     geom.build_mesh();
 
