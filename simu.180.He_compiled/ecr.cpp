@@ -79,7 +79,7 @@ void simu( int *argc, char ***argv )
     geom.set_boundary(  7, Bound(BOUND_DIRICHLET, 24.0e3) );
     geom.set_boundary(  8, Bound(BOUND_DIRICHLET, -1.0e3) );
     geom.set_boundary(  9, Bound(BOUND_DIRICHLET, 700) );
-    geom.set_boundary( 10, Bound(BOUND_DIRICHLET, 0) );
+    geom.set_boundary( 10, Bound(BOUND_DIRICHLET, 0.0) );
 
     geom.build_mesh();
 
